@@ -3,5 +3,5 @@ COMP 3717 Android labs
 
 Team:
   Yuni
-  Gina
+  Gina (Juhee) Kim A01051003
   Nicholas McGrath A00931408
