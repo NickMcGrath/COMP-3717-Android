@@ -1,5 +1,5 @@
 # COMP-3717-Android
-COMP 3717 Android labs
+COMP 3717 Android Project
 
 Team:
   Yuni (Yunseong) Hur A01063658
