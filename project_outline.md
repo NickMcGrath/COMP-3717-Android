@@ -20,5 +20,5 @@
 </p>
 <p>
   <h4>Preliminary App Idea:</h4>
-  <p>This is an app for students that displays a list of libraries and schools in Vancouver.The students can check-in to any of the locations on the list and find a buddy to study with. We focus on creating a supportive environment for students where they can help each other out on certain subjects, watch their belongings when taking a short washroom break, and make studying more enjoyable.</p>
+  <p>This is an app for students that displays a list of libraries and schools in Vancouver. The students can check-in to any of the locations on the list and find a buddy to study with. We focus on creating a supportive environment for students where they can help each other out on certain subjects, watch their belongings when taking a short washroom break, and make studying more enjoyable.</p>
 <p>
