@@ -12,6 +12,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -21,20 +25,19 @@ public class MainActivity extends AppCompatActivity {
 
 
         //This method is used for testing queries.
-        vancouverAPI(49.2899, -123.0, 100000, 2);
+        vancouverAPI(49.2899, -123.0, 100000, 7);
+
     }
 
     /**
-     * Currently a test method!
-     * This method creates a query to Vancouver Data API.
+     * Creates a query to Vancouver Data API, Response is sent to a helper method.
      *
      * @param xCoord the x coordinate
      * @param yCoord the y coordinate
      * @param radius radius in meters
-     * @param rows the amount of entities to return
-     *
+     * @param rows   the amount of entities to return
      */
-    public void vancouverAPI(double xCoord, double yCoord, int radius, int rows) {
+    private void vancouverAPI(double xCoord, double yCoord, int radius, int rows) {
         // Instantiate the RequestQueue.
         final TextView textView = (TextView) findViewById(R.id.TestText);
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -44,8 +47,11 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        textView.setText("Response is: " + response);
+                        try {
+                            setTextFromVancouverAPI(new JSONObject(response));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -55,5 +61,28 @@ public class MainActivity extends AppCompatActivity {
         });
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+    }
+
+    /**
+     * Helper method takes a JSONObject and sets TextFields.
+     *
+     * @param apiResponse JSON from vancouver data api
+     * @throws JSONException
+     */
+    private void setTextFromVancouverAPI(JSONObject apiResponse) throws JSONException {
+        final TextView textView = findViewById(R.id.TestText);
+
+        JSONArray records = apiResponse.getJSONArray("records");
+
+        String basicTextTest = "";
+        for (int i = 0; i < records.length(); i++) {
+            JSONObject record = records.getJSONObject(i);
+            basicTextTest += "Name of Library:";
+            basicTextTest += record.getJSONObject("fields").getString("name");
+            basicTextTest += "\n\t\tDistance (meters):";
+            basicTextTest += record.getJSONObject("fields").getString("dist");
+            basicTextTest += "\n";
+        }
+        textView.setText(basicTextTest);
     }
 }
