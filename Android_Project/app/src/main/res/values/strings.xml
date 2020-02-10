@@ -3,5 +3,11 @@
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_application_id" translatable="false">866283157164152</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb866283157164152</string>
+    <!-- ListView title -->
     <string name="libraries">Libraries</string>
+    <!-- Navigation components -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="cloud_study">Cloud Study</string>
+    <string name="profile_img">IMAGE</string>
 </resources>
