@@ -1,0 +1,44 @@
+{
+  "records": [
+    {
+      "name": "BCIT Downtown Campus",
+      "address": "555 Seymour St, Vancouver, BC V6B 3H6",
+      "coordinates": [
+        49.283542,
+        -123.115233
+      ]
+    },
+    {
+      "name": "BCIT Burnaby",
+      "address": "SE, 3700 Willingdon Ave #6, Burnaby, BC V5G 3H2",
+      "coordinates": [
+        49.250865,
+        -123.000763
+      ]
+    },
+    {
+      "name": "UBC Vancouver",
+      "address": "7Q63+6J Vancouver, British Columbia",
+      "coordinates": [
+        49.260610,
+        -123.245978
+      ]
+    },
+    {
+      "name": "Simon Fraser University",
+      "address": "8888 University Dr, Burnaby, BC V5A 1S6",
+      "coordinates": [
+        49.278948,
+        -122.919379
+      ]
+    },
+    {
+      "name": "Simon Fraser University Vancouver Campus",
+      "address": "515 W Hastings St, Vancouver, BC V6B 5K3",
+      "coordinates": [
+        49.284673,
+        -123.111428
+      ]
+    }
+  ]
+}

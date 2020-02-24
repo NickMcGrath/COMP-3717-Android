@@ -8,16 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     Button test_btn;
@@ -71,27 +61,37 @@ public class MainActivity extends AppCompatActivity {
         });
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+        //This uses the DatabaseQueries class to get a PositionDataPoint object then set it in this activity.
+        setTestField();
     }
 
+
     /**
-     * Helper method takes a JSONObject and sets TextFields.
-     *
-     * @param apiResponse JSON from vancouver data api
-     * @throws JSONException
+     * Sets test text field with data queried from DatabaseQueries class.
      */
-    private void setTextFromVancouverAPI(JSONObject apiResponse) throws JSONException {
+    private void setTestField() {
         final TextView textView = findViewById(R.id.TestText);
-
-        JSONArray records = apiResponse.getJSONArray("records");
-
         String basicTextTest = "";
-        for (int i = 0; i < records.length(); i++) {
-            JSONObject record = records.getJSONObject(i);
-            basicTextTest += "Name of Library:";
-            basicTextTest += record.getJSONObject("fields").getString("name");
-            basicTextTest += "\n\t\tDistance (meters):";
-            basicTextTest += record.getJSONObject("fields").getString("dist");
-            basicTextTest += "\n";
+
+        PositionDataPoint[] positionDataPoints = DatabaseQueries.getLibraries(getBaseContext());
+        for (PositionDataPoint point : positionDataPoints) {
+            basicTextTest += point.type;
+            basicTextTest += point.name;
+            basicTextTest += point.address;
+            basicTextTest += point.x;
+            basicTextTest += point.y;
+            basicTextTest += '\n';
+
+        }
+        positionDataPoints = DatabaseQueries.getSchools(getBaseContext());
+        for (PositionDataPoint point : positionDataPoints) {
+            basicTextTest += point.type;
+            basicTextTest += point.name;
+            basicTextTest += point.address;
+            basicTextTest += point.x;
+            basicTextTest += point.y;
+            basicTextTest += '\n';
+
         }
         textView.setText(basicTextTest);
     }

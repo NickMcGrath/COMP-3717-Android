@@ -1,0 +1,407 @@
+{
+  "nhits": 22,
+  "parameters": {
+    "dataset": "libraries",
+    "timezone": "UTC",
+    "rows": 100,
+    "format": "json"
+  },
+  "records": [
+    {
+      "datasetid": "libraries",
+      "recordid": "9490d2e4170f3d1b8cf42cfafca4da1e7e9367b0",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/champlain_heights_branch",
+        "geo_local_area": "Killarney",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.0402,
+            49.2191
+          ]
+        },
+        "name": "Champlain Heights",
+        "address": "7110 Kerr St"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "1d2b97ef378588005015e7fcf717aba0e5fa0dcd",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/firehall_branch",
+        "geo_local_area": "Fairview",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.1376,
+            49.2629
+          ]
+        },
+        "name": "Firehall",
+        "address": "1455 W 10th Av"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "ad563f4d5ec1fefa0d140333eba228f9bfbbbc4b",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/kitsilano_branch",
+        "geo_local_area": "Kitsilano",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.1687,
+            49.2647
+          ]
+        },
+        "name": "Kitsilano",
+        "address": "2425 Macdonald St"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "a632ab0a2cfeb7b1383e8bcf39956274c7e51ae6",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/mount_pleasant_branch",
+        "geo_local_area": "Mount Pleasant",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.1002,
+            49.2643
+          ]
+        },
+        "name": "Mount Pleasant",
+        "address": "1 Kingsway"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "302714ae65cdcbd1e8a9e5e7d28e33ab63a03c0f",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/south_hill_branch",
+        "geo_local_area": "Sunset",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.0903,
+            49.2295
+          ]
+        },
+        "name": "South Hill",
+        "address": "6076 Fraser St"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "0da85a6d7c39f7d863f1abd7301cd17e02877a7c",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/west_point_grey_branch",
+        "geo_local_area": "West Point Grey",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.2086,
+            49.2635
+          ]
+        },
+        "name": "West Point Grey",
+        "address": "4480 W 10th Av"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "6c54e9a80c16800a5826a057aec0d22ffc90d99f",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/renfrew_branch",
+        "geo_local_area": "Renfrew-Collingwood",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.043,
+            49.2524
+          ]
+        },
+        "name": "Renfrew",
+        "address": "2969 E 22nd Av"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "adbcad399d6fe448c2d2924665f048eef7a2ae34",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/britannia_branch",
+        "geo_local_area": "Grandview-Woodland",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.0738,
+            49.2756
+          ]
+        },
+        "name": "Britannia",
+        "address": "1661 Napier St"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "cdb3345e6e51ff40e300ea9084e9f5d38c633478",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/carnegie_branch",
+        "geo_local_area": "Downtown",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.1001,
+            49.2811
+          ]
+        },
+        "name": "Carnegie",
+        "address": "401 Main St"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "ec367de238e42c3c3efbf882fa75bf40f0d43a51",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/central_library",
+        "geo_local_area": "Downtown",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.1156,
+            49.2797
+          ]
+        },
+        "name": "Central Branch",
+        "address": "350 W Georgia St"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "15e3ea2fb0edcf97d0a8cabfd96a62b42948145a",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/dunbar_branch",
+        "geo_local_area": "Dunbar-Southlands",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.1856,
+            49.246
+          ]
+        },
+        "name": "Dunbar",
+        "address": "4515 Dunbar St"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "ebd3aff1e13b4fd811c26b67273323e80204be73",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/hastings_branch",
+        "geo_local_area": "Hastings-Sunrise",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.05,
+            49.2809
+          ]
+        },
+        "name": "Hastings",
+        "address": "2674 E Hastings St"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "4c7e1de2fd23abadf250a007dd20fefd8222ee7b",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/kensington_branch",
+        "geo_local_area": "Kensington-Cedar Cottage",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.0753,
+            49.2491
+          ]
+        },
+        "name": "Kensington",
+        "address": "1428 Cedar Cottage Mews"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "e7eccde284abfff7029a4132b104a3093c58b7b7",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/oakridge_branch",
+        "geo_local_area": "Oakridge",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.1172,
+            49.2327
+          ]
+        },
+        "name": "Oakridge",
+        "address": "191-650 W 41st Av"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "cd666062dd97f83cd10a99477fe7e20cf7fe9033",
+      "fields": {
+        "urllink": "http://www.vpl.ca/location/terry-salman-branch",
+        "geo_local_area": "Riley Park",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.1079,
+            49.2438
+          ]
+        },
+        "name": "Terry Salman",
+        "address": "4575 Clancy Loranger Way"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "8310a072958ebb432d89fc56c86baa46ac0729f2",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/strathcona_branch",
+        "geo_local_area": "Strathcona",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.0915,
+            49.2798
+          ]
+        },
+        "name": "Strathcona",
+        "address": "592 E Pender St"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "c9814854e4259fe50527da8c1b84e8d38fb2cc1a",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/collingwood_branch",
+        "geo_local_area": "Renfrew-Collingwood",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.0426,
+            49.2362
+          ]
+        },
+        "name": "Collingwood",
+        "address": "2985 Kingsway"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "d46704e2ff3aaacaa44a2589b17344f2fe75ef2c",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/fraserview_branch",
+        "geo_local_area": "Victoria-Fraserview",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.0669,
+            49.2197
+          ]
+        },
+        "name": "Fraserview",
+        "address": "1950 Argyle Drive"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "9609e9a07492ab6cd5723b43ef8cd04b801ac310",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/joe_fortes_branch",
+        "geo_local_area": "West End",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.1361,
+            49.2899
+          ]
+        },
+        "name": "Joe Fortes",
+        "address": "870 Denman St"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "f19460f0ae2a16d682273d26a8a97e6123e036ba",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/kerrisdale_branch",
+        "geo_local_area": "Kerrisdale",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.1571,
+            49.2332
+          ]
+        },
+        "name": "Kerrisdale",
+        "address": "2112 W 42nd Av"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "e5e12682d9701d546e13bc45e5d769fac58d0c01",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/marpole_branch",
+        "geo_local_area": "Marpole",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.14,
+            49.2104
+          ]
+        },
+        "name": "Marpole",
+        "address": "8386 Granville St"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    },
+    {
+      "datasetid": "libraries",
+      "recordid": "2be91b4b951100e1bed2ca07480ad03a577442f3",
+      "fields": {
+        "urllink": "http://www.vpl.ca/branches/details/outreach_branch",
+        "geo_local_area": "Downtown",
+        "geom": {
+          "type": "Point",
+          "coordinates": [
+            -123.1156,
+            49.2797
+          ]
+        },
+        "name": "Outreach Services",
+        "address": "302-345 Robson St"
+      },
+      "record_timestamp": "2019-03-14T11:02:24.431000+00:00"
+    }
+  ]
+}
