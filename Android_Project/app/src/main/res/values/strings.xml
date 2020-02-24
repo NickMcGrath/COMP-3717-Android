@@ -3,4 +3,5 @@
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_application_id" translatable="false">866283157164152</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb866283157164152</string>
+    <string name="googleSignIn">Google Sign in</string>
 </resources>

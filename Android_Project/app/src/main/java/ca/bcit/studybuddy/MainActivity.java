@@ -2,7 +2,10 @@ package ca.bcit.studybuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -17,17 +20,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
-
+    Button test_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        test_btn = findViewById(R.id.login);
 
         //This method is used for testing queries.
         vancouverAPI(49.2899, -123.0, 100000, 7);
 
+    }
+
+    public void moveToGoogleSignIn(View view){
+        Intent intent = new Intent(this, login.class);
+        startActivity(intent);
     }
 
     /**
