@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "181411368137-7m6eaailfhollooiuoeb0atog2dunhhq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ca.bcit.studybuddy",
+            "certificate_hash": "145a419545e3b01d51c9f649449b03e9e5045d99"
+          }
+        },
+        {
           "client_id": "181411368137-l90v9431ve3uenqbpkq7o3snnfemfknh.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -28,7 +36,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "181411368137-l90v9431ve3uenqbpkq7o3snnfemfknh.apps.googleusercontent.com",
+              "client_id": "181411368137-ki483afn9e4db3oq4ir8mul6urnk8vn5.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
