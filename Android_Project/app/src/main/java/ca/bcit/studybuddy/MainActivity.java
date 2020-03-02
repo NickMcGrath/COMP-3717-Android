@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //This uses the DatabaseQueries class to get a PositionDataPoint object then set it in this activity.
-        setTestField();
+        //setTestField();
     }
 
 
