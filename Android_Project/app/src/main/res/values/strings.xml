@@ -11,4 +11,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="cloud_study">Cloud Study</string>
     <string name="profile_img">IMAGE</string>
+    <!-- Navigation fragments -->
+    <string name="your_profile">Your profile</string>
+    <string name="study_tools">Study tools</string>
+    <string name="checkout">Checkout</string>
+    <string name="communicate">Communicate</string>
+    <string name="log_out">Log out</string>
 </resources>
