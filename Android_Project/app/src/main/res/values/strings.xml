@@ -17,4 +17,9 @@
     <string name="checkout">Checkout</string>
     <string name="communicate">Communicate</string>
     <string name="log_out">Log out</string>
+    <!-- Fragment Checkout texts; current location and address are hardcoded for now -->
+    <string name="text_label">Your are currently at:</string>
+    <string name="current_location">Central Branch</string>
+    <string name="address">350 W Georgia St, Vancouver, BC V6B 6B1</string>
+    <string name="btn_check_out">Check out</string>
 </resources>
