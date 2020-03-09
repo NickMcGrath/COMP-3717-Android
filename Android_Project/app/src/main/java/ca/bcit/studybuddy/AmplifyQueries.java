@@ -1,4 +1,7 @@
 package ca.bcit.studybuddy;
+
+import com.amazonaws.mobile.client.AWSMobileClient;
+
 ///**
 // * PositionDataPoint models a point on a map.
 // *
@@ -20,6 +23,25 @@ package ca.bcit.studybuddy;
 //
 //    }
 //}
-public class AmplifyQueries {
-
-}
+//public class AmplifyQueries {
+//    public void init(){
+//        AWSMobileClient.getInstance().initialize(getApplicationContext(), new Callback<UserStateDetails>() {
+//            @Override
+//            public void onResult(UserStateDetails userStateDetails) {
+//                try {
+//                    Amplify.addPlugin(new AWSApiPlugin());
+//                    Amplify.configure(getApplicationContext());
+//                    Log.i("ApiQuickstart", "All set and ready to go!");
+//                } catch (Exception e) {
+//                    Log.e("ApiQuickstart", e.getMessage());
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Exception e) {
+//                Log.e("ApiQuickstart", "Initialization error.", e);
+//            }
+//        });
+//    }
+//
+//}
