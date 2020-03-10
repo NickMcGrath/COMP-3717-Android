@@ -2,10 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 
 android {
-    compileOptions { //amplify api
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
-    }
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
@@ -25,9 +21,6 @@ android {
 }
 
 dependencies {
-    //amplify api
-    implementation 'com.amplifyframework:core:0.9.1'
-    implementation 'com.amplifyframework:aws-api:0.9.1'
 
     //Google Auth
     implementation 'com.google.firebase:firebase-auth:19.2.0'

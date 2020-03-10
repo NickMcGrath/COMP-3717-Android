@@ -1,7 +1,5 @@
 package ca.bcit.studybuddy;
 
-import com.amazonaws.mobile.client.AWSMobileClient;
-
 ///**
 // * PositionDataPoint models a point on a map.
 // *

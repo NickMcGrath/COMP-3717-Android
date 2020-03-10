@@ -4,13 +4,9 @@ buildscript {
     repositories {
         google()
         jcenter()
-        mavenCentral() //amplify api
 
     }
     dependencies {
-        //2 below are for optional amplify auto gen models
-//        classpath 'com.android.tools.build:gradle:3.5.0'
-//        classpath 'com.amplifyframework:amplify-tools-gradle-plugin:0.2.1'
 
         classpath 'com.android.tools.build:gradle:3.5.3' //amplify api
 
@@ -20,7 +16,6 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-//apply plugin: 'com.amplifyframework.amplifytools' //optional amplify auto gen models
 
 allprojects {
     repositories {
