@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -72,89 +73,107 @@ public class DatabaseQueries {
         data.put("major", "Computer Science");
         data.put("school", "BCIT");
         data.put("phone", "6045551234");
-        data.put("googID", "4321"); // note this must be implemented when used in activity
         data.put("requests", new ArrayList<String>());
+        data.put("sentRequests", new ArrayList<String>());
         data.put("friends", new ArrayList<String>());
-        data.put("library", "");
+        data.put("location", "");
+        String googID = "1235";
 
-        db.collection("students")
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection("students").document(googID)
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
+                        Log.w(TAG, "Error writing document", e);
                     }
                 });
     }
 
-    public static void viewCurrentUser(String googID) {
+    public static void viewUser(String googID) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("students")
-                .whereEqualTo("googID", googID)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
+        db.collection("students").document(googID)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d(TAG, "No such document");
                     }
-                });
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 
     public static void realTimeCurrentUser(String googID) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("students")
-                .whereEqualTo("googID", googID)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+        db.collection("students").document(googID)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot value,
+                    public void onEvent(@Nullable DocumentSnapshot snapshot,
                                         @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
                             Log.w(TAG, "Listen failed.", e);
                             return;
                         }
-                        // for loop becuase could return 2 but wont because each goog id is unique
-                        for (QueryDocumentSnapshot doc : value) {
-                            Map<String, Object> data = doc.getData();
-                            Log.d(TAG, (String) data.get("name"));
+
+                        if (snapshot != null && snapshot.exists()) {
+                            Log.d(TAG, "Current data: " + snapshot.getData());
+                        } else {
+                            Log.d(TAG, "Current data: null");
                         }
                     }
                 });
     }
-
-    public static void realTimeRequestsListener(String id) {
+    public static void sendRequest(String senderGoogID, String receiverGoogID){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final DocumentReference docRef = db.collection("students").document(id);
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
-
-                if (snapshot != null && snapshot.exists()) {
-                    Log.d(TAG, "Current data: " + snapshot.getData());
-                    // check if request fields exists then get the requests field
-                } else {
-                    Log.d(TAG, "Current data: null");
-                }
-            }
-        });
+        db.collection("students").document(senderGoogID)
+                .update("sentRequests", FieldValue.arrayUnion(receiverGoogID));
+        db.collection("students").document(receiverGoogID)
+                .update("requests", FieldValue.arrayUnion(senderGoogID));
 
     }
+    public static void acceptRequest(String accepterGoogID, String accepteGoogID){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //remove request
+        db.collection("students").document(accepterGoogID)
+                .update("requests", FieldValue.arrayRemove(accepteGoogID));
+        //add friend
+        db.collection("students").document(accepterGoogID)
+                .update("friends", FieldValue.arrayUnion(accepteGoogID));
+        //remove request
+        db.collection("students").document(accepteGoogID)
+                .update("sentRequests", FieldValue.arrayRemove(accepterGoogID));
+        //add friend
+        db.collection("students").document(accepteGoogID)
+                .update("friends", FieldValue.arrayUnion(accepterGoogID));
+
+    }
+    public static void checkIn(String googID, String locationID){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("locations").document(locationID)
+                .update("students", FieldValue.arrayUnion(googID));
+        db.collection("students").document(googID)
+                .update("location", locationID);
+    }
+    public static void checkOut(String googID, String locationID){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("locations").document(locationID)
+                .update("students", FieldValue.arrayRemove(googID));
+        db.collection("students").document(googID)
+                .update("location", "");
+    }
+
 }
 
 

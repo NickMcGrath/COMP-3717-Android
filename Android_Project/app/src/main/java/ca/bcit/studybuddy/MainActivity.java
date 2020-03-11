@@ -18,7 +18,11 @@ public class MainActivity extends AppCompatActivity {
 //        DatabaseQueries.addUser();
 //        DatabaseQueries.realTimeRequestsListener("yQZkN8cVmfYopmn6XkUA");
 //        DatabaseQueries.viewCurrentUser("1234");
-        DatabaseQueries.realTimeCurrentUser("1234");
+//        DatabaseQueries.realTimeCurrentUser("1234");
+//        DatabaseQueries.sendRequest("1234", "1235");
+//        DatabaseQueries.acceptRequest("1235", "1234");
+//        DatabaseQueries.checkIn("1234", "4Q7nTqq0kAkEDEkWkHPX");
+        DatabaseQueries.checkOut("1234", "4Q7nTqq0kAkEDEkWkHPX");
     }
 
     /**
