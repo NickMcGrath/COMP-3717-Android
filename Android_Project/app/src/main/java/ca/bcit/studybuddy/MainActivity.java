@@ -3,6 +3,7 @@ package ca.bcit.studybuddy;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 
@@ -14,8 +15,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d("nictest", "In MainActivity");
         setContentView(R.layout.activity_main);
-        DatabaseQueries.initFireStore();
-        Log.d("DatabaseQueries", DatabaseQueries.getFireStoreDataPoints().toString());
+//        DatabaseQueries.addUser();
+//        DatabaseQueries.realTimeRequestsListener("yQZkN8cVmfYopmn6XkUA");
+//        DatabaseQueries.viewCurrentUser("1234");
+        DatabaseQueries.realTimeCurrentUser("1234");
     }
 
     /**
@@ -23,43 +26,14 @@ public class MainActivity extends AppCompatActivity {
      * It is here because getBaseContext() needs to be passed in from an activity.
      * For initially setting up all the libraries and schools found in the json files under app/assets
      */
-    private void initFirebaseWithPositions() {
-        PositionDataPoint[] schools = DatabaseQueries.getSchoolsJSON(getBaseContext());
-        PositionDataPoint[] libraries = DatabaseQueries.getLibrariesJSON(getBaseContext());
-        for (PositionDataPoint school : schools) {
-            DatabaseQueries.addToFireStoreCollection("locations", DatabaseQueries.DataPointToMap(school));
-        }
-        for (PositionDataPoint library : libraries) {
-            DatabaseQueries.addToFireStoreCollection("locations", DatabaseQueries.DataPointToMap(library));
-        }
-    }
-//    /**
-//     * Sets test text field with data queried from DatabaseQueries class.
-//     */
-//    private void setTestField() {
-//        final TextView textView = findViewById(R.id.TestText);
-//        String basicTextTest = "";
-//
-//        PositionDataPoint[] positionDataPoints = DatabaseQueries.getLibraries(getBaseContext());
-//        for (PositionDataPoint point : positionDataPoints) {
-//            basicTextTest += point.type;
-//            basicTextTest += point.name;
-//            basicTextTest += point.address;
-//            basicTextTest += point.x;
-//            basicTextTest += point.y;
-//            basicTextTest += '\n';
-//
+//    private void initFirebaseWithPositions() {
+//        PositionDataPoint[] schools = DatabaseQueries.getSchoolsJSON(getBaseContext());
+//        PositionDataPoint[] libraries = DatabaseQueries.getLibrariesJSON(getBaseContext());
+//        for (PositionDataPoint school : schools) {
+//            DatabaseQueries.addToFireStoreCollection("locations", DatabaseQueries.DataPointToMap(school));
 //        }
-//        positionDataPoints = DatabaseQueries.getSchools(getBaseContext());
-//        for (PositionDataPoint point : positionDataPoints) {
-//            basicTextTest += point.type;
-//            basicTextTest += point.name;
-//            basicTextTest += point.address;
-//            basicTextTest += point.x;
-//            basicTextTest += point.y;
-//            basicTextTest += '\n';
-//
+//        for (PositionDataPoint library : libraries) {
+//            DatabaseQueries.addToFireStoreCollection("locations", DatabaseQueries.DataPointToMap(library));
 //        }
-//        textView.setText(basicTextTest);
 //    }
 }
