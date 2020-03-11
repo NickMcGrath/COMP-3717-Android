@@ -13,12 +13,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("nictest", "In MainActivity");
         setContentView(R.layout.activity_main);
 //        DatabaseQueries.addUser();
-//        DatabaseQueries.realTimeRequestsListener("yQZkN8cVmfYopmn6XkUA");
-//        DatabaseQueries.viewCurrentUser("1234");
         DatabaseQueries.realTimeCurrentUser("1234");
+        DatabaseQueries.viewUser("1234");
+//        DatabaseQueries.realTimeCurrentUser("1234");
+//        DatabaseQueries.sendRequest("1234", "1235");
+//        DatabaseQueries.acceptRequest("1235", "1234");
+//        DatabaseQueries.checkIn("1234", "4Q7nTqq0kAkEDEkWkHPX");
+//        DatabaseQueries.checkOut("1234", "4Q7nTqq0kAkEDEkWkHPX");
     }
 
     /**
