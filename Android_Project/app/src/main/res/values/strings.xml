@@ -22,4 +22,12 @@
     <string name="current_location">Central Branch</string>
     <string name="address">350 W Georgia St, Vancouver, BC V6B 6B1</string>
     <string name="btn_check_out">Check out</string>
+    <!-- Profile components-->
+    <string name="greetings">Hey [username]!</string>
+    <string name="phone_text_view">Your Phone Number</string>
+    <string name="school_text_view">Your School</string>
+    <string name="major_text_view">Your Major</string>
+    <string name="email_place_holder">email@gmail.com</string>
+    <string name="profile_update_btn">Update Profile</string>
+    <string name="email_text_view">Your Email</string>
 </resources>

@@ -1,5 +1,6 @@
 package ca.bcit.studybuddy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -53,11 +54,11 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        if(savedInstanceState==null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new YourProfileFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_your_profile);
-        }
+//        if(savedInstanceState==null) {
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                    new YourProfileFragment()).commit();
+//            navigationView.setCheckedItem(R.id.nav_your_profile);
+//        }
 
         name = findViewById(R.id.testing_text);
 
