@@ -77,7 +77,7 @@ public class DatabaseQueries {
         data.put("sentRequests", new ArrayList<String>());
         data.put("friends", new ArrayList<String>());
         data.put("location", "");
-        String googID = "1235";
+        String googID = "1236";
 
         db.collection("students").document(googID)
                 .set(data)
