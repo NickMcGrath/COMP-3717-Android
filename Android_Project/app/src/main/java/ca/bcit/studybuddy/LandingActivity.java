@@ -71,6 +71,9 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
             case R.id.nav_your_profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new YourProfileFragment()).commit();
                 break;
+            case R.id.nav_notification:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationFragment()).commit();
+                break;
             case R.id.nav_study_tools:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new StudyToolsFragment()).commit();
                 break;

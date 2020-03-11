@@ -13,6 +13,7 @@
     <string name="profile_img">IMAGE</string>
     <!-- Navigation fragments -->
     <string name="your_profile">Your profile</string>
+    <string name="notification">Notification</string>
     <string name="study_tools">Study tools</string>
     <string name="checkout">Checkout</string>
     <string name="communicate">Communicate</string>
