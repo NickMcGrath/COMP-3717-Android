@@ -22,24 +22,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 
 public class LandingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    TextView name;
 
-    String[] librariesNearby = {"nearest", "second-nearest", "third-nearest"};
     private DrawerLayout drawer;
-
-    GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
-
-        // ListView
-        ArrayAdapter adapter = new ArrayAdapter<>(this,
-                R.layout.activity_listview, librariesNearby);
-
-        ListView listView = findViewById(R.id.library_list);
-        listView.setAdapter(adapter);
 
         // Hamburger menu bar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -54,21 +43,20 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-//        if(savedInstanceState==null) {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                    new YourProfileFragment()).commit();
-//            navigationView.setCheckedItem(R.id.nav_your_profile);
-//        }
-
-        name = findViewById(R.id.testing_text);
-
-        googleSignIn();
+        if(savedInstanceState==null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new HomeFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_home);
+        }
 
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
+            case R.id.nav_home:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                break;
             case R.id.nav_your_profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new YourProfileFragment()).commit();
                 break;
@@ -93,23 +81,6 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-        }
-    }
-
-    public void googleSignIn(){
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if (acct != null) {
-            String personName = acct.getDisplayName();
-            String personEmail = acct.getEmail();
-
-            name.setText(personName);
         }
     }
 }
