@@ -1,13 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <TextView
+        android:id="@+id/label_notifications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/notification"
-        android:textSize="30sp"
-        android:layout_centerInParent="true">
-    </TextView>
+        android:text="@string/label_notifications"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="30dp"/>
 
-</RelativeLayout>
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#bfbfbf"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"/>
+
+    <TextView
+        android:id="@+id/label_requests_received"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_requests_received"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="30dp"/>
+
+    <TextView
+        android:id="@+id/label_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_from"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"/>
+
+    <ListView
+        android:id="@+id/requests_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+    </ListView>
+</LinearLayout>
+
+
+    <!--    <Button-->
+<!--        android:id="@+id/btn_accept"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/btn_accept"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/btn_decline"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/btn_decline" />-->
