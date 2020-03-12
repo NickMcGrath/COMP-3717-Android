@@ -12,8 +12,8 @@
     <string name="cloud_study">Cloud Study</string>
     <string name="profile_img">IMAGE</string>
     <!-- Navigation fragments -->
+    <string name="home">Home</string>
     <string name="your_profile">Your profile</string>
-    <string name="notification">Notification</string>
     <string name="study_tools">Study tools</string>
     <string name="checkout">Checkout</string>
     <string name="communicate">Communicate</string>
@@ -23,10 +23,15 @@
     <string name="current_location">Central Branch</string>
     <string name="address">350 W Georgia St, Vancouver, BC V6B 6B1</string>
     <string name="btn_check_out">Check out</string>
-    <!-- Fragment Notification texts; requests are hardcoded for now -->
-    <string name="label_notifications">Notifications</string>
-    <string name="label_requests_received">Requests Received</string>
-    <string name="label_from">From:</string>
-    <string name="btn_accept">Accept</string>
-    <string name="btn_decline">Decline</string>
+    <!-- Profile components-->
+    <string name="greetings">Hey [username]!</string>
+    <string name="phone_text_view">Your Phone Number</string>
+    <string name="school_text_view">Your School</string>
+    <string name="major_text_view">Your Major</string>
+    <string name="email_place_holder">email@gmail.com</string>
+    <string name="profile_update_btn">Update Profile</string>
+    <string name="email_text_view">Your Email</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
