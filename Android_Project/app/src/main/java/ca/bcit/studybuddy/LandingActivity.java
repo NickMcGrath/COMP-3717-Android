@@ -43,6 +43,10 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.map, new MapsActivity()).commit();
+        startActivity(new Intent(this, MapsActivity.class));
+
 
     }
 
