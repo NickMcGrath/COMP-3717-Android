@@ -8,9 +8,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,10 +18,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -41,7 +34,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LandingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
@@ -49,8 +46,8 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
     String TAG = "LandingPage";
     private Map<Marker, Map<String, Object>> markers = new HashMap<>();
     private DrawerLayout drawer;
-    double currentx;
-    double currenty;
+    double currentX = 0.0;
+    double currentY = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +70,6 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        //only for loading firebase with json files.
-//        startActivity(new Intent(this, MapsActivity.class));
-//        initFirebaseWithPositions();
-
     }
 
     @Override
@@ -91,15 +83,15 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                 Location gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 Location netLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 if (gpsLocation != null) {
-                    currentx = gpsLocation.getLatitude();
-                    currenty = gpsLocation.getLongitude();
-                    LatLng currentLocation = new LatLng(currentx, currenty);
+                    currentX = gpsLocation.getLatitude();
+                    currentY = gpsLocation.getLongitude();
+                    LatLng currentLocation = new LatLng(currentX, currentY);
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLocation, 15);
                     googleMap.animateCamera(cameraUpdate);
                 } else if (netLocation != null) {
-                    currentx = netLocation.getLatitude();
-                    currenty = netLocation.getLongitude();
-                    LatLng currentLocation = new LatLng(currentx, currenty);
+                    currentX = netLocation.getLatitude();
+                    currentY = netLocation.getLongitude();
+                    LatLng currentLocation = new LatLng(currentX, currentY);
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLocation, 15);
                     googleMap.animateCamera(cameraUpdate);
                 }
@@ -112,22 +104,42 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                 Map dataModel = (Map) markers.get(marker);
                 String title = (String) dataModel.get("pk");
                 Log.d(TAG, title);
-//                markerOnClick(title);
-
                 return false;
             }
         });
 
     }
+
+    /**
+     * Sets the bottom bar with the closest locations.
+     *
+     * @// TODO: 2020-03-13 actually makes the bottom show LOL
+     */
+    public void setBottomBarLocations() {
+        ArrayList<Map> markersByDist = new ArrayList<Map>(markers.values());
+        Collections.sort(markersByDist, new Comparator<Map>() {
+            public int compare(Map o1, Map o2) {
+                return (int) ((double) o1.get("distance") - (double) o2.get("distance"));
+            }
+        });
+        for (Map map : markersByDist) {
+            Log.d(TAG, map.get("distance") + " " + map.get("name"));
+        }
+
+    }
+
+    /**
+     * Returns the distance between 2 points.
+     */
     public double distanceFrom(double lat1, double lng1, double lat2, double lng2) {
         double earthRadius = 3958.75;
-        double dLat = Math.toRadians(lat2-lat1);
-        double dLng = Math.toRadians(lng2-lng1);
-        double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLng/2) * Math.sin(dLng/2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLng = Math.toRadians(lng2 - lng1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double dist = earthRadius * c;
         int meterConversion = 1609;
-        return new Double(dist * meterConversion).floatValue();    // this will return distance
+        return new Double(dist * meterConversion).floatValue();
     }
 
     public void setLocations() {
@@ -140,7 +152,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map<String, Object> data = document.getData();
                                 data.put("pk", document.getId());
-                                data.put("distance", distanceFrom((double) data.get("x"), (double) data.get("y"), currentx, currenty));
+                                data.put("distance", distanceFrom((double) data.get("x"), (double) data.get("y"), currentX, currentY));
                                 //data values:
                                 // document.getId(), (String) data.get("name"), (String) data.get("address"), (String) data.get("type"), (double) data.get("x"), (double) data.get("y"), (ArrayList) data.get("students")
                                 LatLng point = new LatLng((double) data.get("x"), (double) data.get("y"));
@@ -154,8 +166,8 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                                     markers.put(marker, data);
                                     Log.d(TAG, document.getId() + " => " + "has: " + 0 + " students");
                                 }
-                                //here is where you would use data.get(key) to set location info
                             }
+                            setBottomBarLocations();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
