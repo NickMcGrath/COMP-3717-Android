@@ -43,10 +43,9 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-//        getSupportFragmentManager().beginTransaction()
-//                .add(R.id.map, new MapsActivity()).commit();
+        //to display the map
         startActivity(new Intent(this, MapsActivity.class));
-
+//        initFirebaseWithPositions();
 
     }
 
@@ -84,6 +83,21 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+    /**
+     * This method is a little bit jank and should not be here LOL
+     * It is here because getBaseContext() needs to be passed in from an activity.
+     * For initially setting up all the libraries and schools found in the json files under app/assets
+     */
+    private void initFirebaseWithPositions() {
+        DatabaseQueries.PositionDataPoint[] schools = DatabaseQueries.getSchoolsJSON(getBaseContext());
+        DatabaseQueries.PositionDataPoint[] libraries = DatabaseQueries.getLibrariesJSON(getBaseContext());
+        for (DatabaseQueries.PositionDataPoint school : schools) {
+            DatabaseQueries.addToFireStoreCollection("locations", DatabaseQueries.DataPointToMap(school));
+        }
+        for (DatabaseQueries.PositionDataPoint library : libraries) {
+            DatabaseQueries.addToFireStoreCollection("locations", DatabaseQueries.DataPointToMap(library));
         }
     }
 }
