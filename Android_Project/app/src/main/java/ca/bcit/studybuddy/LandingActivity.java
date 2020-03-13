@@ -8,6 +8,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,9 +44,12 @@ import java.util.List;
 import java.util.Map;
 
 public class LandingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+    private String TAG = "LandingPage";
     private GoogleMap mMap;
-    String TAG = "LandingPage";
     private Map<Marker, Map<String, Object>> markers = new HashMap<>();
+    private ArrayList<Map> markersByDist;
+    private ArrayAdapter<String> libraryListAdapter;
+    private ListView libraryListView;
     private DrawerLayout drawer;
     double currentX = 0.0;
     double currentY = 0.0;
@@ -72,6 +77,11 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
     }
 
+    /**
+     * When map is ready zooms in on current location.
+     *
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "in onMapReady");
@@ -112,19 +122,22 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 
     /**
      * Sets the bottom bar with the closest locations.
-     *
-     * @// TODO: 2020-03-13 actually makes the bottom show LOL
      */
     public void setBottomBarLocations() {
-        ArrayList<Map> markersByDist = new ArrayList<Map>(markers.values());
+        markersByDist = new ArrayList<Map>(markers.values());
         Collections.sort(markersByDist, new Comparator<Map>() {
             public int compare(Map o1, Map o2) {
                 return (int) ((double) o1.get("distance") - (double) o2.get("distance"));
             }
         });
-        for (Map map : markersByDist) {
-            Log.d(TAG, map.get("distance") + " " + map.get("name"));
+        libraryListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+
+        for (int i = 0; i < markersByDist.size() && i < 15; i++) {
+            Log.d(TAG, markersByDist.get(i).get("distance") + " " + markersByDist.get(i).get("name"));
+            libraryListAdapter.add((String) markersByDist.get(i).get("name") + "\n" + markersByDist.get(i).get("address"));
         }
+        libraryListView = (ListView) findViewById(R.id.library_list);
+        libraryListView.setAdapter(libraryListAdapter);
 
     }
 
@@ -142,6 +155,9 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         return new Double(dist * meterConversion).floatValue();
     }
 
+    /**
+     * Sets Map marker locations then calls setBottomBarLocaitons().
+     */
     public void setLocations() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("locations").get()

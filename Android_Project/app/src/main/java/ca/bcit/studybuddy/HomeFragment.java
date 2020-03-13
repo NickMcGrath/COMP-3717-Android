@@ -1,5 +1,6 @@
 package ca.bcit.studybuddy;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
-public class HomeFragment extends Fragment {
+import java.util.HashMap;
 
+public class HomeFragment extends Fragment {
+    private static String TAG = "HomeFragment";
     private TextView name;
 
-    private String[] librariesNearby = {"nearest", "second-nearest", "third-nearest"};
+    public String[] librariesNearby = {"nearest", "second-nearest", "third-nearest"};
     private DrawerLayout drawer;
 
     GoogleSignInClient mGoogleSignInClient;
@@ -29,7 +32,6 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-
         // ListView
         ArrayAdapter adapter = new ArrayAdapter<>(getActivity(),
                 R.layout.activity_listview, librariesNearby);
@@ -43,7 +45,6 @@ public class HomeFragment extends Fragment {
 
         return v;
     }
-
     protected void googleSignIn(){
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
