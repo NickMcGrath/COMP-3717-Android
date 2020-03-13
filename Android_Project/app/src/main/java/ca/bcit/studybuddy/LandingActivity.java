@@ -1,7 +1,12 @@
 package ca.bcit.studybuddy;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -12,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -19,16 +25,41 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class LandingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+public class LandingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+    private GoogleMap mMap;
+    String TAG = "LandingPage";
+    private Map<Marker, Map<String, Object>> markers = new HashMap<>();
     private DrawerLayout drawer;
+    double currentx;
+    double currenty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         // Hamburger menu bar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -43,15 +74,99 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        //to display the map
-        startActivity(new Intent(this, MapsActivity.class));
+        //only for loading firebase with json files.
+//        startActivity(new Intent(this, MapsActivity.class));
 //        initFirebaseWithPositions();
 
     }
 
     @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Log.d(TAG, "in onMapReady");
+        mMap = googleMap;
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+            if (locationManager != null) {
+                Location gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                Location netLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if (gpsLocation != null) {
+                    currentx = gpsLocation.getLatitude();
+                    currenty = gpsLocation.getLongitude();
+                    LatLng currentLocation = new LatLng(currentx, currenty);
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLocation, 15);
+                    googleMap.animateCamera(cameraUpdate);
+                } else if (netLocation != null) {
+                    currentx = netLocation.getLatitude();
+                    currenty = netLocation.getLongitude();
+                    LatLng currentLocation = new LatLng(currentx, currenty);
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLocation, 15);
+                    googleMap.animateCamera(cameraUpdate);
+                }
+            }
+        }
+        setLocations();
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Map dataModel = (Map) markers.get(marker);
+                String title = (String) dataModel.get("pk");
+                Log.d(TAG, title);
+//                markerOnClick(title);
+
+                return false;
+            }
+        });
+
+    }
+    public double distanceFrom(double lat1, double lng1, double lat2, double lng2) {
+        double earthRadius = 3958.75;
+        double dLat = Math.toRadians(lat2-lat1);
+        double dLng = Math.toRadians(lng2-lng1);
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLng/2) * Math.sin(dLng/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double dist = earthRadius * c;
+        int meterConversion = 1609;
+        return new Double(dist * meterConversion).floatValue();    // this will return distance
+    }
+
+    public void setLocations() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("locations").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> data = document.getData();
+                                data.put("pk", document.getId());
+                                data.put("distance", distanceFrom((double) data.get("x"), (double) data.get("y"), currentx, currenty));
+                                //data values:
+                                // document.getId(), (String) data.get("name"), (String) data.get("address"), (String) data.get("type"), (double) data.get("x"), (double) data.get("y"), (ArrayList) data.get("students")
+                                LatLng point = new LatLng((double) data.get("x"), (double) data.get("y"));
+
+                                if (((ArrayList) data.get("students")).size() > 0) {
+                                    Log.d(TAG, document.getId() + " => " + "has: " + ((ArrayList) data.get("students")).size() + " students");
+                                    Marker marker = mMap.addMarker(new MarkerOptions().position(point).title((String) data.get("name") + "\nWith" + ((ArrayList) data.get("students")).size() + "Students!"));
+                                    markers.put(marker, data);
+                                } else {
+                                    Marker marker = mMap.addMarker(new MarkerOptions().position(point).title((String) data.get("name")));
+                                    markers.put(marker, data);
+                                    Log.d(TAG, document.getId() + " => " + "has: " + 0 + " students");
+                                }
+                                //here is where you would use data.get(key) to set location info
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.nav_home:
                 Intent intent = new Intent(LandingActivity.this, LandingActivity.class);
                 startActivity(intent);
@@ -85,6 +200,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
             super.onBackPressed();
         }
     }
+
     /**
      * This method is a little bit jank and should not be here LOL
      * It is here because getBaseContext() needs to be passed in from an activity.
