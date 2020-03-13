@@ -8,6 +8,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -36,11 +38,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class LandingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
@@ -121,6 +121,16 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
     }
 
     /**
+     * To forward to the clicked location intent.
+     * @param index from closest to farthest.
+     */
+    public void onBottomLocationSelection(int index) {
+        //this is where next intent on location selection
+        Log.d(TAG, (String) markersByDist.get(index).get("name"));
+
+    }
+
+    /**
      * Sets the bottom bar with the closest locations.
      */
     public void setBottomBarLocations() {
@@ -138,6 +148,13 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         }
         libraryListView = (ListView) findViewById(R.id.library_list);
         libraryListView.setAdapter(libraryListAdapter);
+        // Set an item click listener for ListView
+        libraryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                onBottomLocationSelection(position);
+            }
+        });
 
     }
 
