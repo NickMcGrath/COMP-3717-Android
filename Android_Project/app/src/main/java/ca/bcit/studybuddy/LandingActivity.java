@@ -25,7 +25,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -48,18 +47,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class LandingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
-    private String TAG = "LandingPage";
+    private String TAG = "LandingActivity";
     private GoogleMap mMap;
     private Map<Marker, Map<String, Object>> markers = new HashMap<>();
-    private ArrayList<Map> markersByDist;
+    private ArrayList<Map> locationsByDist;
     private ArrayAdapter<String> libraryListAdapter;
     private ListView libraryListView;
-    private ArrayList<String> notifications;
+    private ArrayList<String> requestsByID;
     private DrawerLayout drawer;
     double currentX = 0.0;
     double currentY = 0.0;
@@ -77,7 +74,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         acct = GoogleSignIn.getLastSignedInAccount(this);
         libraryListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         libraryListView = (ListView) findViewById(R.id.library_list);
-        notifications = new ArrayList<>();
+        requestsByID = new ArrayList<>();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -111,11 +108,11 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                         if (snapshot != null && snapshot.exists()) {
                             Log.d(TAG, "Current data: " + snapshot.getData());
                             Map<String, Object> data = snapshot.getData();
-                            if(((ArrayList<String>) data.get("requests")).size() >= notifications.size()) {
-                                notifications = (ArrayList<String>) data.get("requests");
+                            if(((ArrayList<String>) data.get("requests")).size() >= requestsByID.size()) {
+                                requestsByID = (ArrayList<String>) data.get("requests");
                                 Toast.makeText(getBaseContext(), "New Request!" , Toast.LENGTH_SHORT).show();
                             } else {
-                                notifications = (ArrayList<String>) data.get("requests");
+                                requestsByID = (ArrayList<String>) data.get("requests");
                             }
 
 
@@ -144,7 +141,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 //                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
 //                        Log.d(TAG, (String) data.get("name"));
 //                            Log.d(TAG, "yes i am not null");
-//                            notifications.add(document.getData());
+//                            requestsByID.add(document.getData());
 //                    } else {
 //                        Log.d(TAG, "No such document");
 //                    }
@@ -155,7 +152,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 //        });    }
 //    public void onRequestSelection(int index){
 //        //this is where next intent on request selection
-//        Log.d(TAG, (String) notifications.get(index).get("name"));
+//        Log.d(TAG, (String) requestsByID.get(index).get("name"));
 //    }
 
     /**
@@ -208,7 +205,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
      */
     public void onBottomLocationSelection(int index) {
         //this is where next intent on location selection
-        Log.d(TAG, (String) markersByDist.get(index).get("name"));
+        Log.d(TAG, (String) locationsByDist.get(index).get("name"));
 
     }
 
@@ -216,17 +213,17 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
      * Sets the bottom bar with the closest locations.
      */
     public void setBottomBarLocations() {
-        markersByDist = new ArrayList<Map>(markers.values());
-        Collections.sort(markersByDist, new Comparator<Map>() {
+        locationsByDist = new ArrayList<Map>(markers.values());
+        Collections.sort(locationsByDist, new Comparator<Map>() {
             public int compare(Map o1, Map o2) {
                 return (int) ((double) o1.get("distance") - (double) o2.get("distance"));
             }
         });
         libraryListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
 
-        for (int i = 0; i < markersByDist.size() && i < 15; i++) {
-            Log.d(TAG, markersByDist.get(i).get("distance") + " " + markersByDist.get(i).get("name"));
-            libraryListAdapter.add((String) markersByDist.get(i).get("name") + "\n" + markersByDist.get(i).get("address"));
+        for (int i = 0; i < locationsByDist.size() && i < 15; i++) {
+            Log.d(TAG, locationsByDist.get(i).get("distance") + " " + locationsByDist.get(i).get("name"));
+            libraryListAdapter.add((String) locationsByDist.get(i).get("name") + "\n" + locationsByDist.get(i).get("address"));
         }
         libraryListView = (ListView) findViewById(R.id.library_list);
         libraryListView.setAdapter(libraryListAdapter);
