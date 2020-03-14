@@ -22,8 +22,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -32,6 +35,7 @@ import java.util.Map;
 
 public class YourProfileFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     String TAG = "Your Profile Frag";
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     String[] schools = {"BCIT", "UBC", "SFU"};
     TextView name;
     TextView email;
@@ -69,7 +73,9 @@ public class YourProfileFragment extends Fragment implements AdapterView.OnItemS
 
             name.setText(personName);
             email.setText(personEmail);
+            setFirebaseValues(acct.getId());
         }
+
 
 
         Spinner school_spinner = (Spinner) v.findViewById(R.id.school_spinner);
@@ -83,6 +89,34 @@ public class YourProfileFragment extends Fragment implements AdapterView.OnItemS
         return v;
 
     }
+    private void setFirebaseValues(String googID){
+            db.collection("students").document(googID)
+                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                            Map<String, Object> data = document.getData();
+                            phone.setText((String) data.get("phone"));
+                            major.setText((String) data.get("major"));
+                            for(int i = 0; i< schools.length; i++){
+                                if(schools[i].equals((String) data.get("school"))){
+                                    school.setSelection(i);
+                                    break;
+                                }
+                            }
+
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -107,7 +141,6 @@ public class YourProfileFragment extends Fragment implements AdapterView.OnItemS
             //todo add input verification**
             Log.d(TAG, "What are they selling?" + major.getText().toString());
 
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
             Map<String, Object> data = new HashMap<>();
             data.put("name", acct.getGivenName());
             data.put("major", major.getText().toString());
@@ -117,6 +150,7 @@ public class YourProfileFragment extends Fragment implements AdapterView.OnItemS
             data.put("sentRequests", new ArrayList<String>());
             data.put("friends", new ArrayList<String>());
             data.put("location", "");
+            data.put("pk", acct.getId());
             String googID = acct.getId();
 
             db.collection("students").document(googID)

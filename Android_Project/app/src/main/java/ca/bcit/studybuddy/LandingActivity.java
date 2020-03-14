@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,6 +23,9 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,7 +37,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -41,7 +48,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class LandingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
     private String TAG = "LandingPage";
@@ -50,14 +59,25 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
     private ArrayList<Map> markersByDist;
     private ArrayAdapter<String> libraryListAdapter;
     private ListView libraryListView;
+    private ArrayList<String> notifications;
     private DrawerLayout drawer;
     double currentX = 0.0;
     double currentY = 0.0;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    GoogleSignInAccount acct;
+
+    public LandingActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
+
+        acct = GoogleSignIn.getLastSignedInAccount(this);
+        libraryListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        libraryListView = (ListView) findViewById(R.id.library_list);
+        notifications = new ArrayList<>();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -75,7 +95,68 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        realtimeProfileUpdater(acct.getId());
     }
+
+    public void realtimeProfileUpdater(String googID) {
+        db.collection("students").document(googID)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
+                        if (snapshot != null && snapshot.exists()) {
+                            Log.d(TAG, "Current data: " + snapshot.getData());
+                            Map<String, Object> data = snapshot.getData();
+                            if(((ArrayList<String>) data.get("requests")).size() >= notifications.size()) {
+                                notifications = (ArrayList<String>) data.get("requests");
+                                Toast.makeText(getBaseContext(), "New Request!" , Toast.LENGTH_SHORT).show();
+                            } else {
+                                notifications = (ArrayList<String>) data.get("requests");
+                            }
+
+
+                        } else {
+                            Log.d(TAG, "Current data: null");
+                        }
+                    }
+                });
+    }
+
+    /**
+     * takes the Google IDs of requests and sets Notification array
+     *
+     * @param googID
+     */
+//    public void setNotification(String googID) {
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection("students").document(googID)
+//                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        Map<String, Object> data = document.getData();
+//                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+//                        Log.d(TAG, (String) data.get("name"));
+//                            Log.d(TAG, "yes i am not null");
+//                            notifications.add(document.getData());
+//                    } else {
+//                        Log.d(TAG, "No such document");
+//                    }
+//                } else {
+//                    Log.d(TAG, "get failed with ", task.getException());
+//                }
+//            }
+//        });    }
+//    public void onRequestSelection(int index){
+//        //this is where next intent on request selection
+//        Log.d(TAG, (String) notifications.get(index).get("name"));
+//    }
 
     /**
      * When map is ready zooms in on current location.
@@ -122,6 +203,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 
     /**
      * To forward to the clicked location intent.
+     *
      * @param index from closest to farthest.
      */
     public void onBottomLocationSelection(int index) {
@@ -176,7 +258,6 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
      * Sets Map marker locations then calls setBottomBarLocaitons().
      */
     public void setLocations() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("locations").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
