@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/checkin_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="30dp"/>
+
+    <TextView
+        android:id="@+id/checkin_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_below="@+id/checkin_location"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"/>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#bfbfbf"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_below="@+id/checkin_address"/>
+
+    <Button
+        android:id="@+id/check_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_check_in"
+        android:layout_below="@+id/divider"
+        android:layout_marginTop="50dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:layout_centerInParent="true"/>
+
+
+</RelativeLayout>
