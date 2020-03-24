@@ -306,9 +306,6 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
             case R.id.nav_checkout:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CheckoutFragment()).commit();
                 break;
-            case R.id.nav_logout:
-                Toast.makeText(this, "you have successfully logged out.", Toast.LENGTH_LONG).show();
-                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
