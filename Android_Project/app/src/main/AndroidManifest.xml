@@ -39,6 +39,7 @@
         <activity
             android:name=".LandingActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".CheckinActivity"></activity>
     </application>
 
 </manifest>

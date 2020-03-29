@@ -3,6 +3,7 @@ package ca.bcit.studybuddy;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +43,9 @@ public class login extends AppCompatActivity {
 
 
         btn_login = findViewById(R.id.login);
+        btn_login.setBackgroundColor(Color.parseColor("#DE7070"));
+        btn_login.setText(R.string.googleSignIn);
+        btn_login.setTextColor(Color.WHITE);
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
