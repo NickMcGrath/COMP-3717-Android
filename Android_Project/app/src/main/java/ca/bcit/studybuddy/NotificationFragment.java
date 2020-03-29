@@ -28,8 +28,8 @@ public class NotificationFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
 
-        final String names[] = {"Gina","Nick","Yuni"};
-        final String schools[] = {"BCIT","BCIT","BCIT"};
+        final String names[] = {"Gina Kim","Nick McGrath","Yuni Hur"};
+        final String schools[] = {"British Columbia Institute of Technology","British Columbia Institute of Technology","British Columbia Institute of Technology"};
         final int images[] = {R.drawable.logo, R.drawable.logo, R.drawable.logo};
 
         ListView listView = (ListView) view.findViewById(R.id.requests_list);
@@ -74,6 +74,11 @@ public class NotificationFragment extends Fragment {
             ImageView imageView = row.findViewById(R.id.profile_image);
             TextView aName = row.findViewById(R.id.textView1);
             TextView aSchool = row.findViewById(R.id.textView2);
+
+
+            imageView.setImageResource(rImages[position]);
+            aName.setText(rNames[position]);
+            aSchool.setText(rSchools[position]);
 
             return row;
         }
