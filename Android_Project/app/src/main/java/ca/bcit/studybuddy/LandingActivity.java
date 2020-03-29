@@ -201,12 +201,18 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
     /**
      * To forward to the clicked location intent.
      *
-     * @param index from closest to farthest.
+     *
      */
-    public void onBottomLocationSelection(int index) {
+    public void onBottomLocationSelection(String locationName, String locationAddress) {
         //this is where next intent on location selection
-        Log.d(TAG, (String) locationsByDist.get(index).get("name"));
+//        Log.d(TAG, (String) locationsByDist.get(index).get("name"));
 
+        Intent intent = new Intent(LandingActivity.this, CheckinActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("locationName", locationName);
+        bundle.putString("locationAddress", locationAddress);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     /**
@@ -228,10 +234,21 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         libraryListView = (ListView) findViewById(R.id.library_list);
         libraryListView.setAdapter(libraryListAdapter);
         // Set an item click listener for ListView
+//        libraryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent = new Intent(LandingActivity.this, CheckinActivity.class);
+//                startActivity(intent);
+//            }
+//        });
         libraryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                onBottomLocationSelection(position);
+
+                String locationName = locationsByDist.get(position).get("name").toString();
+                String locationAddress = locationsByDist.get(position).get("address").toString();
+
+                onBottomLocationSelection(locationName, locationAddress);
             }
         });
 
