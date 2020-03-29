@@ -43,4 +43,6 @@
     <string name="title_activity_maps">Map</string>
     <!-- activity_checkin text -->
     <string name="btn_check_in">Check in</string>
+    <!-- activity_after_checkingin text -->
+    <string name="label_your_potential_study_buddy">Your Potential Study Buddy</string>
 </resources>

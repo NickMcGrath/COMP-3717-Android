@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/checkin_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="30dp"/>
+
+    <TextView
+        android:id="@+id/checkin_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_below="@+id/checkin_location"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"/>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#bfbfbf"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_below="@+id/checkin_address"/>
+
+    <TextView
+        android:id="@+id/label_your_potential_study_buddy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_your_potential_study_buddy"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_below="@+id/divider"/>
+
+    <ListView
+        android:id="@+id/potential_buddy_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/label_your_potential_study_buddy"/>
+
+
+
+</RelativeLayout>
