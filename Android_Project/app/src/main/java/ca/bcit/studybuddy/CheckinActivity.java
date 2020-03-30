@@ -1,6 +1,9 @@
 package ca.bcit.studybuddy;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,6 +18,7 @@ public class CheckinActivity extends AppCompatActivity {
 
     TextView library;
     TextView address;
+    Button btnCheckIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +27,7 @@ public class CheckinActivity extends AppCompatActivity {
 
         library = findViewById(R.id.checkin_location);
         address = findViewById(R.id.checkin_address);
+        btnCheckIn = findViewById(R.id.check_in);
 
         Bundle bundle = getIntent().getExtras();
 
@@ -33,7 +38,12 @@ public class CheckinActivity extends AppCompatActivity {
         library.setText(locationName);
         address.setText(locationAddress);
 
-
-
+        btnCheckIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(view.getContext(), AfterCheckinginActivity.class);
+                startActivity(myIntent);
+            }
+        });
     }
 }

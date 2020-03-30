@@ -40,6 +40,7 @@
             android:name=".LandingActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CheckinActivity"></activity>
+        <activity android:name=".AfterCheckinginActivity"></activity>
     </application>
 
 </manifest>
