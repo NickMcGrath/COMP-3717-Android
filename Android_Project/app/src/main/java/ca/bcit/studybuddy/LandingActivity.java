@@ -38,6 +38,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -58,10 +59,10 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
     private ListView libraryListView;
     private ArrayList<String> requestsByID;
     private DrawerLayout drawer;
-    double currentX = 0.0;
-    double currentY = 0.0;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    GoogleSignInAccount acct;
+    private double currentX = 0.0;
+    private double currentY = 0.0;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static GoogleSignInAccount acct;
 
     public LandingActivity() {
     }
@@ -94,7 +95,9 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
         realtimeProfileUpdater(acct.getId());
     }
-
+    public void testMethod(){
+        Log.d(TAG, "big old test");
+    }
     public void realtimeProfileUpdater(String googID) {
         db.collection("students").document(googID)
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -301,6 +304,14 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                         }
                     }
                 });
+    }
+
+    public static void checkIn(String locationID) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("locations").document(locationID)
+                .update("students", FieldValue.arrayUnion(acct.getId()));
+        db.collection("students").document(acct.getId())
+                .update("location", locationID);
     }
 
 
