@@ -57,12 +57,13 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
     private ArrayList<Map> locationsByDist;
     private ArrayAdapter<String> libraryListAdapter;
     private ListView libraryListView;
-    private ArrayList<String> requestsByID;
     private DrawerLayout drawer;
     private double currentX = 0.0;
     private double currentY = 0.0;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static GoogleSignInAccount acct;
+    public User user;
+    private int previousRequestSize = 0;
 
     public LandingActivity() {
     }
@@ -75,7 +76,6 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         acct = GoogleSignIn.getLastSignedInAccount(this);
         libraryListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         libraryListView = (ListView) findViewById(R.id.library_list);
-        requestsByID = new ArrayList<>();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -95,9 +95,11 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
         realtimeProfileUpdater(acct.getId());
     }
-    public void testMethod(){
+
+    public void testMethod() {
         Log.d(TAG, "big old test");
     }
+
     public void realtimeProfileUpdater(String googID) {
         try {
             db.collection("students").document(googID)
@@ -112,20 +114,31 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                             if (snapshot != null && snapshot.exists()) {
                                 Log.d(TAG, "Current data: " + snapshot.getData());
                                 Map<String, Object> data = snapshot.getData();
-                                if (((ArrayList<String>) data.get("requests")).size() >= requestsByID.size()) {
-                                    requestsByID = (ArrayList<String>) data.get("requests");
+
+                                user = new User(
+                                        (String) data.get("name"),
+                                        (String) data.get("location"),
+                                        (String) data.get("major"),
+                                        (String) data.get("phone"),
+                                        (String) data.get("pk"),
+                                        (String) data.get("school"),
+                                        (ArrayList<String>) data.get("friends"),
+                                        (ArrayList<String>) data.get("requests"),
+                                        (ArrayList<String>) data.get("sentRequests")
+                                );
+
+
+                                if (user.requests != null && user.requests.size() > previousRequestSize) {
+                                    previousRequestSize = user.requests.size();
                                     Toast.makeText(getBaseContext(), "New Request!", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    requestsByID = (ArrayList<String>) data.get("requests");
                                 }
-
-
+                                Log.d(TAG, user.toString());
                             } else {
                                 Log.d(TAG, "Current data: null");
                             }
                         }
                     });
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.d(TAG, e.getMessage());
         }
     }
@@ -207,8 +220,6 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 
     /**
      * To forward to the clicked location intent.
-     *
-     *
      */
     public void onBottomLocationSelection(String locationName, String locationAddress, String locationPk) {
         //this is where next intent on location selection

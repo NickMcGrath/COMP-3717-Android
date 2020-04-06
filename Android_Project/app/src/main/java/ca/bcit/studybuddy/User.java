@@ -27,4 +27,19 @@ public class User {
         this.requests = requests;
         this.sendRequests = sendRequests;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", location='" + location + '\'' +
+                ", major='" + major + '\'' +
+                ", phone='" + phone + '\'' +
+                ", pk='" + pk + '\'' +
+                ", school='" + school + '\'' +
+                ", friends=" + friends +
+                ", requests=" + requests +
+                ", sendRequests=" + sendRequests +
+                '}';
+    }
 }
