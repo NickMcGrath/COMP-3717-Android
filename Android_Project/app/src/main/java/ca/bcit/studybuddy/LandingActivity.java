@@ -359,6 +359,9 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         //remove request
         db.collection("students").document(user.pk)
                 .update("requests", FieldValue.arrayRemove(accepteGoogID));
+        //remove sent request just incase
+        db.collection("students").document(user.pk)
+                .update("sentRequests", FieldValue.arrayRemove(accepteGoogID));
         //add friend
         db.collection("students").document(user.pk)
                 .update("friends", FieldValue.arrayUnion(accepteGoogID));
@@ -370,7 +373,26 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                 .update("friends", FieldValue.arrayUnion(user.pk));
 
     }
+    /**
+     * Decline a friend request.
+     *
+     * @param accepteGoogID
+     */
+    public void declineRequest(String accepteGoogID) {
+        //remove request
+        db.collection("students").document(user.pk)
+                .update("requests", FieldValue.arrayRemove(accepteGoogID));
+        //add friend
+//        db.collection("students").document(user.pk)
+//                .update("friends", FieldValue.arrayUnion(accepteGoogID));
+        //remove request
+        db.collection("students").document(accepteGoogID)
+                .update("sentRequests", FieldValue.arrayRemove(user.pk));
+        //add friend
+//        db.collection("students").document(accepteGoogID)
+//                .update("friends", FieldValue.arrayUnion(user.pk));
 
+    }
     /**
      * check into location
      *

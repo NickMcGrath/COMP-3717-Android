@@ -72,7 +72,7 @@ public class NotificationFragment extends Fragment {
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View row = layoutInflater.inflate(R.layout.fragment_notification_listview, parent, false);
-            //View view = inflater.inflate(R.layout.fragment_notification, container, false);
+//            View view = inflater.inflate(R.layout.fragment_notification, container, false);
             ImageView imageView = row.findViewById(R.id.profile_image);
             TextView aName = row.findViewById(R.id.textView1);
             TextView aSchool = row.findViewById(R.id.textView2);
@@ -80,11 +80,34 @@ public class NotificationFragment extends Fragment {
             imageView.setImageResource(rImages[position]);
             aName.setText(rNames[position]);
             aSchool.setText(rSchools[position]);
-
             //Handle buttons and add onClickListeners
             Button btnViewProfile = (Button) row.findViewById(R.id.btn_view_profile);
-            //Button btnAccept = (Button)row.findViewById(R.id.btn_accept);
-            //Button btnDecline = (Button)row.findViewById(R.id.btn_decline);
+            final Button btnAccept = (Button) row.findViewById(R.id.btn_accept);
+            final Button btnDecline = (Button) row.findViewById(R.id.btn_decline);
+            final int pos = position;
+            if (((LandingActivity) getActivity()).user.friends.contains(users.get(position).pk)) {
+                btnAccept.setAlpha(0);
+                btnDecline.setAlpha(0);
+                aSchool.setText(rSchools[position] + "\n" + users.get(position).phone);
+            } else {
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        acceptRequest(pos);
+                        btnAccept.setAlpha(0);
+                        btnDecline.setAlpha(0);
+                    }
+                });
+                btnDecline.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        declineRequest(pos);
+                        btnAccept.setAlpha(0);
+                        btnDecline.setAlpha(0);
+                    }
+                });
+            }
+
 
             btnViewProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -93,6 +116,24 @@ public class NotificationFragment extends Fragment {
                 }
             });
             return row;
+        }
+
+        /**
+         * Accept a request.
+         *
+         * @param pos
+         */
+        public void acceptRequest(int pos) {
+            ((LandingActivity) getActivity()).acceptRequest(users.get(pos).pk);
+        }
+
+        /**
+         * decline a request.
+         *
+         * @param pos
+         */
+        public void declineRequest(int pos) {
+            ((LandingActivity) getActivity()).declineRequest(users.get(pos).pk);
         }
 
         public void showDialog() {
@@ -126,12 +167,11 @@ public class NotificationFragment extends Fragment {
 
     /**
      * This sets the users in the Adapter.
-     *
+     * <p>
      * This is the nastiest code I have ever written, I apologize for anyone that has to see this.
      * It all started when I realized that making 2 calls to a firebase sequentially would be harder
      * than I though 🤔 then when I realized these calls where async methods that cant return like
      * normal methods, that is when it got bad
-     *
      */
     public void getUsers() {
         final ArrayList<String> usersIDs = new ArrayList<String>();
@@ -145,6 +185,7 @@ public class NotificationFragment extends Fragment {
                                 Log.d(TAG, "Current data: " + document.getData());
                                 Map<String, Object> data = document.getData();
                                 usersIDs.addAll((ArrayList<String>) data.get("requests"));
+                                usersIDs.addAll((ArrayList<String>) data.get("friends"));
                                 Log.d("mylog", usersIDs.toString());
                             } else {
                                 Log.d(TAG, "No such document");
