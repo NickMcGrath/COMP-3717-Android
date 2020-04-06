@@ -6,16 +6,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -80,6 +78,7 @@ public class AfterCheckinginActivity extends Fragment {
         String rSchools[];
         int rImages[];
 
+
         MyAdapter(Context c, String name[], String school[], int img[]) {
             super(c, R.layout.activity_buddy_listview, R.id.textView1, name);
             this.context = c;
@@ -90,7 +89,7 @@ public class AfterCheckinginActivity extends Fragment {
 
         @NonNull
         @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View row = layoutInflater.inflate(R.layout.activity_buddy_listview, parent, false);
             ImageView imageView = row.findViewById(R.id.profile_image);
@@ -101,15 +100,26 @@ public class AfterCheckinginActivity extends Fragment {
             imageView.setImageResource(rImages[position]);
             aName.setText(rNames[position]);
             aSchool.setText(rSchools[position]);
+            Button b = row.findViewById(R.id.btn_request);
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onPressRequest(position);
+                }
+            });
 
 
             return row;
         }
     }
 
+    public void onPressRequest(int pos) {
+        Log.d(TAG, "made it here " + pos);
+    }
+
     /**
      * Gets all the users at a location and sets them in Adapter.
-     *
+     * <p>
      * This is the nastiest code I have ever written, I apologize for anyone that has to see this.
      * It all started when I realized that making 2 calls to a firebase sequentially would be harder
      * than I though 🤔 then when I realized these calls where async methods that cant return like

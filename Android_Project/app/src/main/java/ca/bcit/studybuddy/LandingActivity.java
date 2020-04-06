@@ -80,7 +80,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
-
+        System.out.println("HELLLOTEST");
         acct = GoogleSignIn.getLastSignedInAccount(this);
         libraryListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         libraryListView = (ListView) findViewById(R.id.library_list);
