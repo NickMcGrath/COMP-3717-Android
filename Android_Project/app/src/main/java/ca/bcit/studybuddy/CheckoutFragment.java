@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +15,8 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 
 public class CheckoutFragment extends Fragment {
-
+    private TextView location;
+    private TextView address;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -22,21 +24,31 @@ public class CheckoutFragment extends Fragment {
         Button btnCheckOut = v.findViewById(R.id.btn_check_out);
         btnCheckOut.setOnClickListener(btnListener);
 
-        TextView location = v.findViewById(R.id.current_location);
-        TextView address = v.findViewById(R.id.address);
-        String locationStr = getArguments().getString("locationName");
-        String addressStr = getArguments().getString("locationAddress");
-        location.setText(locationStr);
-        address.setText(addressStr);
+        location = v.findViewById(R.id.current_location);
+        address = v.findViewById(R.id.address);
 
-
+        if (((LandingActivity) getActivity()).user.location != ""){
+            String locationStr = getArguments().getString("locationName");
+            String addressStr = getArguments().getString("locationAddress");
+            location.setText(locationStr);
+            address.setText(addressStr);
+        }
         return v;
 
     }
 
     private View.OnClickListener btnListener = new View.OnClickListener(){
         public void onClick(View v){
-            ((LandingActivity) getActivity()).checkOut();
+            if (((LandingActivity) getActivity()).user.location != ""){
+                ((LandingActivity) getActivity()).checkOut();
+                Toast toast = Toast.makeText(v.getContext(), "You have successfully checked-out!", Toast.LENGTH_SHORT);
+                toast.show();
+                location.setText("");
+                address.setText("");
+            } else {
+                Toast toast = Toast.makeText(v.getContext(), "You are not checked-in", Toast.LENGTH_SHORT);
+                toast.show();
+            }
         }
     };
 }
