@@ -101,13 +101,17 @@ public class AfterCheckinginActivity extends Fragment {
             aName.setText(rNames[position]);
             aSchool.setText(rSchools[position]);
             final Button b = row.findViewById(R.id.btn_request);
-            b.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onPressRequest(position);
-                    b.setAlpha((float) 0.5);
-                }
-            });
+            if (((LandingActivity) getActivity()).user.friends.contains(users.get(position).pk)) {
+                b.setAlpha(0);
+            } else {
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onPressRequest(position);
+                        b.setAlpha((float) 0.5);
+                    }
+                });
+            }
 
 
             return row;
