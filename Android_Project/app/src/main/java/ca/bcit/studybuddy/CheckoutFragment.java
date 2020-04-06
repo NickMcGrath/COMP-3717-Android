@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+
 public class CheckoutFragment extends Fragment {
 
     @Nullable
@@ -20,6 +22,8 @@ public class CheckoutFragment extends Fragment {
 
     private void test() {
         //copy and paste on btn listener
-        ((LandingActivity)getActivity()).checkOut();
+        ((LandingActivity) getActivity()).checkOut();
+
+         ArrayList<String> friends = ((LandingActivity) getActivity()).user.friends != null ? ((LandingActivity) getActivity()).user.friends : new ArrayList<String>();
     }
 }
