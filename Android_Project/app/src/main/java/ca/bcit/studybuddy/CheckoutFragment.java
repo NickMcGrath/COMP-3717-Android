@@ -1,6 +1,7 @@
 package ca.bcit.studybuddy;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,7 @@ public class CheckoutFragment extends Fragment {
 
         location = v.findViewById(R.id.current_location);
         address = v.findViewById(R.id.address);
-
-        if (((LandingActivity) getActivity()).user.location != ""){
+        if (!((LandingActivity) getActivity()).user.location.equals("")){
             String locationStr = getArguments().getString("locationName");
             String addressStr = getArguments().getString("locationAddress");
             location.setText(locationStr);
