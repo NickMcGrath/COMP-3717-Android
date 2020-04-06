@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -149,12 +150,11 @@ public class YourProfileFragment extends Fragment implements AdapterView.OnItemS
             data.put("requests", new ArrayList<String>());
             data.put("sentRequests", new ArrayList<String>());
             data.put("friends", new ArrayList<String>());
-            data.put("location", "");
             data.put("pk", acct.getId());
             String googID = acct.getId();
 
             db.collection("students").document(googID)
-                    .set(data)
+                    .set(data, SetOptions.merge())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {

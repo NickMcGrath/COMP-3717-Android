@@ -4,21 +4,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CheckinActivity extends AppCompatActivity {
 
     TextView library;
     TextView address;
     Button btnCheckIn;
+    GoogleSignInClient mGoogleSignInClient;
+    GoogleSignInAccount acct;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String locationPk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,22 +35,39 @@ public class CheckinActivity extends AppCompatActivity {
         library = findViewById(R.id.checkin_location);
         address = findViewById(R.id.checkin_address);
         btnCheckIn = findViewById(R.id.check_in);
+        btnCheckIn.setOnClickListener(btnListener);
 
         Bundle bundle = getIntent().getExtras();
 
         String locationName = bundle.getString("locationName");
         String locationAddress = bundle.getString("locationAddress");
+        locationPk = bundle.getString("locationPk");
 
-        // hard coded for now; these should be passed from the landing activity
         library.setText(locationName);
         address.setText(locationAddress);
 
-        btnCheckIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), AfterCheckinginActivity.class);
-                startActivity(myIntent);
-            }
-        });
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        acct = GoogleSignIn.getLastSignedInAccount(this);
+
+
     }
+
+    private View.OnClickListener btnListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            System.out.println("SOMETHING " + locationPk);
+            Map<String, Object> data = new HashMap<>();
+            data.put("location", locationPk);
+            db.collection("students").document(acct.getId()).set(data, SetOptions.merge());
+            Intent myIntent = new Intent(v.getContext(), AfterCheckinginActivity.class);
+            startActivity(myIntent);
+        }
+    };
+
+
 }
