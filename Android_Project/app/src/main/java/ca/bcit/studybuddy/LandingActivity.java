@@ -507,14 +507,14 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
      * It is here because getBaseContext() needs to be passed in from an activity.
      * For initially setting up all the libraries and schools found in the json files under app/assets
      */
-    private void initFirebaseWithPositions() {
-        DatabaseQueries.PositionDataPoint[] schools = DatabaseQueries.getSchoolsJSON(getBaseContext());
-        DatabaseQueries.PositionDataPoint[] libraries = DatabaseQueries.getLibrariesJSON(getBaseContext());
-        for (DatabaseQueries.PositionDataPoint school : schools) {
-            DatabaseQueries.addToFireStoreCollection("locations", DatabaseQueries.DataPointToMap(school));
-        }
-        for (DatabaseQueries.PositionDataPoint library : libraries) {
-            DatabaseQueries.addToFireStoreCollection("locations", DatabaseQueries.DataPointToMap(library));
-        }
-    }
+//    private void initFirebaseWithPositions() {
+//        DatabaseQueries.PositionDataPoint[] schools = DatabaseQueries.getSchoolsJSON(getBaseContext());
+//        DatabaseQueries.PositionDataPoint[] libraries = DatabaseQueries.getLibrariesJSON(getBaseContext());
+//        for (DatabaseQueries.PositionDataPoint school : schools) {
+//            DatabaseQueries.addToFireStoreCollection("locations", DatabaseQueries.DataPointToMap(school));
+//        }
+//        for (DatabaseQueries.PositionDataPoint library : libraries) {
+//            DatabaseQueries.addToFireStoreCollection("locations", DatabaseQueries.DataPointToMap(library));
+//        }
+//    }
 }
