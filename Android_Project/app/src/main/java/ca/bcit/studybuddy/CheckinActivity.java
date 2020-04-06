@@ -68,9 +68,14 @@ public class CheckinActivity extends AppCompatActivity {
 //            db.collection("students").document(acct.getId()).set(data, SetOptions.merge());
             checkIn(locationPk);
 
-            Intent myIntent = new Intent(v.getContext(), AfterCheckinginActivity.class);
-            myIntent.putExtras(bundle);
-            startActivity(myIntent);
+            //Intent myIntent = new Intent(v.getContext(), AfterCheckinginActivity.class);
+            //myIntent.putExtras(bundle);
+            //startActivity(myIntent);
+
+
+            AfterCheckinginActivity afterCheckinginActivity = new AfterCheckinginActivity();
+            afterCheckinginActivity.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AfterCheckinginActivity()).commit();
         }
     };
     public void checkIn(String locationID) {

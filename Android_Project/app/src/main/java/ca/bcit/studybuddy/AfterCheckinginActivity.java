@@ -15,12 +15,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class AfterCheckinginActivity extends AppCompatActivity {
+public class AfterCheckinginActivity extends Fragment {
 
     private TextView library;
     private TextView address;
@@ -29,23 +30,27 @@ public class AfterCheckinginActivity extends AppCompatActivity {
     final String[] names = {"Rahul Kukreja", "Nathan McNinch", "Chi En Huang"};
     final String[] schools = {"British Columbia Institute of Technology","British Columbia Institute of Technology","British Columbia Institute of Technology"};
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_after_checkingin);
-
-        library = findViewById(R.id.checkin_location);
-        address = findViewById(R.id.checkin_address);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.activity_after_checkingin, container, false);
+        library = v.findViewById(R.id.checkin_location);
+        address = v.findViewById(R.id.checkin_address);
 
         // hard coded for now; these should be passed from the landing activity
-        Bundle bundle = getIntent().getExtras();
-        library.setText(bundle.getString("locationName"));
-        address.setText(bundle.getString("locationAddress"));
+        //Bundle bundle = getIntent().getExtras();
 
-        potentialBuddyListView = findViewById(R.id.potential_buddy_list);
+        String locationStr = getArguments().getString("locationName");
+        String addressStr = getArguments().getString("locationAddress");
+        library.setText(locationStr);
+        address.setText(addressStr);
 
-        MyAdapter adapter = new MyAdapter(this, names, schools, images);
+        potentialBuddyListView = v.findViewById(R.id.potential_buddy_list);
+
+        MyAdapter adapter = new MyAdapter(getContext(), names, schools, images);
         potentialBuddyListView.setAdapter(adapter);
+
+        return v;
     }
 
     class MyAdapter extends ArrayAdapter<String>{
