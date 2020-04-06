@@ -99,31 +99,35 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         Log.d(TAG, "big old test");
     }
     public void realtimeProfileUpdater(String googID) {
-        db.collection("students").document(googID)
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
-                            return;
-                        }
-                        if (snapshot != null && snapshot.exists()) {
-                            Log.d(TAG, "Current data: " + snapshot.getData());
-                            Map<String, Object> data = snapshot.getData();
-                            if(((ArrayList<String>) data.get("requests")).size() >= requestsByID.size()) {
-                                requestsByID = (ArrayList<String>) data.get("requests");
-                                Toast.makeText(getBaseContext(), "New Request!" , Toast.LENGTH_SHORT).show();
-                            } else {
-                                requestsByID = (ArrayList<String>) data.get("requests");
+        try {
+            db.collection("students").document(googID)
+                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                            @Nullable FirebaseFirestoreException e) {
+                            if (e != null) {
+                                Log.w(TAG, "Listen failed.", e);
+                                return;
                             }
+                            if (snapshot != null && snapshot.exists()) {
+                                Log.d(TAG, "Current data: " + snapshot.getData());
+                                Map<String, Object> data = snapshot.getData();
+                                if (((ArrayList<String>) data.get("requests")).size() >= requestsByID.size()) {
+                                    requestsByID = (ArrayList<String>) data.get("requests");
+                                    Toast.makeText(getBaseContext(), "New Request!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    requestsByID = (ArrayList<String>) data.get("requests");
+                                }
 
 
-                        } else {
-                            Log.d(TAG, "Current data: null");
+                            } else {
+                                Log.d(TAG, "Current data: null");
+                            }
                         }
-                    }
-                });
+                    });
+        } catch (Exception e){
+            Log.d(TAG, e.getMessage());
+        }
     }
 
     /**
