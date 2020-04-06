@@ -2,6 +2,7 @@ package ca.bcit.studybuddy;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -28,15 +34,24 @@ public class AfterCheckinginActivity extends Fragment {
     private TextView library;
     private TextView address;
     private ListView potentialBuddyListView;
-    private ArrayList<User> users;
-    int[] images; //= {R.drawable.logo, R.drawable.logo, R.drawable.logo};
-    String[] names;// = {"Rahul Kukreja", "Nathan McNinch", "Chi En Huang"};
-    String[] schools;// = {"British Columbia Institute of Technology","British Columbia Institute of Technology","British Columbia Institute of Technology"};
+    private ArrayList<User> users = new ArrayList<User>();
+    private Bundle bundle;
+    private String locationPk;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    int[] images;
+    String[] names;
+    String[] schools;
+    String TAG = "AfterCheckinginActivity";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_after_checkingin, container, false);
+
+        if (getArguments() != null) {
+            bundle = getArguments();
+            locationPk = bundle.getString("locationPk");
+        }
 
         library = v.findViewById(R.id.checkin_location);
         address = v.findViewById(R.id.checkin_address);
@@ -53,27 +68,7 @@ public class AfterCheckinginActivity extends Fragment {
 
 
         //fun zone
-        users = ((LandingActivity) getActivity()).getUsersAtLocation(locationStr);
-        //todo images
-        if(users.size() > 0) {
-            names = new String[users.size()];
-            schools = new String[users.size()];
-            images = new int[users.size()];
-            for (int i = 0; i < users.size(); i++) {
-                names[i] = users.get(i).name;
-                schools[i] = users.get(i).school;
-                images[i] = R.drawable.logo;
-            }
-        } else{
-            names = new String[1];
-            schools = new String[1];
-            images = new int[1];
-            names[0] = "No one Yet :(";
-            schools[0] = "";
-            images[0] = R.drawable.logo;
-        }
-        MyAdapter adapter = new MyAdapter(getContext(), names, schools, images);
-        potentialBuddyListView.setAdapter(adapter);
+        getUsersAtLocation(locationPk);
 
 
         return v;
@@ -107,9 +102,104 @@ public class AfterCheckinginActivity extends Fragment {
             aName.setText(rNames[position]);
             aSchool.setText(rSchools[position]);
 
+
             return row;
         }
     }
 
+    /**
+     * Gets all the users at a location and sets them in Adapter.
+     *
+     * This is the nastiest code I have ever written, I apologize for anyone that has to see this.
+     * It all started when I realized that making 2 calls to a firebase sequentially would be harder
+     * than I though 🤔 then when I realized these calls where async methods that cant return like
+     * normal methods, that is when it got bad
+     *
+     * @param locationID
+     * @return
+     */
+    public void getUsersAtLocation(String locationID) {
+        final ArrayList<String> usersIDs = new ArrayList<String>();
+        Task<DocumentSnapshot> taskGetIds = db.collection("locations").document(locationID)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.d(TAG, "Current data: " + document.getData());
+                                Map<String, Object> data = document.getData();
+                                usersIDs.addAll((ArrayList<String>) data.get("students"));
+                                Log.d("mylog", usersIDs.toString());
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+//                                Log.d(TAG, usersIDs.toString());
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+        Task<DocumentSnapshot> taskGetUsers = taskGetIds.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                for (int i = 0; i < usersIDs.size(); i++) {
+                    db.collection("students").document(usersIDs.get(i))
+                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Log.d(TAG, "Current data: " + document.getData());
+                                    Map<String, Object> data = document.getData();
+
+                                    User aUser = new User(
+                                            (String) data.get("name"),
+                                            (String) data.get("location"),
+                                            (String) data.get("major"),
+                                            (String) data.get("phone"),
+                                            (String) data.get("pk"),
+                                            (String) data.get("school"),
+                                            (ArrayList<String>) data.get("friends"),
+                                            (ArrayList<String>) data.get("requests"),
+                                            (ArrayList<String>) data.get("sentRequests"),
+                                            (String) data.get("photoUrl")
+                                    );
+                                    users.add(aUser);
+                                    Log.d("mylog in view", aUser.toString());
+                                    if (users.size() > 0) {
+                                        names = new String[users.size()];
+                                        schools = new String[users.size()];
+                                        images = new int[users.size()];
+                                        for (int i = 0; i < users.size(); i++) {
+                                            names[i] = users.get(i).name;
+                                            schools[i] = users.get(i).school;
+                                            images[i] = R.drawable.logo;
+                                        }
+                                    } else {
+                                        names = new String[1];
+                                        schools = new String[1];
+                                        images = new int[1];
+                                        names[0] = "No one Yet :(";
+                                        schools[0] = "";
+                                        images[0] = R.drawable.logo;
+                                    }
+                                    Log.d("mylog", Arrays.toString(names));
+                                    MyAdapter adapter = new MyAdapter(getContext(), names, schools, images);
+                                    potentialBuddyListView.setAdapter(adapter);
+                                } else {
+                                    Log.d(TAG, "No such document");
+                                }
+                            } else {
+                                Log.d(TAG, "get failed with ", task.getException());
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
 
 }

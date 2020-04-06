@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.ViewUtils;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -108,6 +110,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         realtimeProfileUpdater(acct.getId());
+
     }
 
     public void realtimeProfileUpdater(String googID) {
@@ -152,6 +155,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         } catch (Exception e) {
             Log.d(TAG, e.getMessage());
         }
+
     }
 
 
@@ -331,81 +335,6 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         } else {
             super.onBackPressed();
         }
-    }
-
-    /**
-     * Returns an ArrayList of all the users at a location
-     *
-     * @param locationID
-     * @return
-     */
-    public ArrayList<User> getUsersAtLocation(String locationID) {
-        final ArrayList<String> usersIDs = new ArrayList<String>();
-        db.collection("locations").document(locationID)
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "Current data: " + document.getData());
-                        Map<String, Object> data = document.getData();
-                        usersIDs.addAll((ArrayList<String>) data.get("students"));
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-        ArrayList<User> users = new ArrayList<User>();
-        for (String userID : usersIDs) {
-            users.add(viewUser(userID));
-        }
-        Log.d(TAG, users.toString());
-        return users;
-    }
-
-    /**
-     * Returns a user from a user id.
-     *
-     * @param googID
-     * @return
-     */
-    public User viewUser(String googID) {
-        final User[] aUser = {null};
-        db.collection("students").document(googID)
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "Current data: " + document.getData());
-                        Map<String, Object> data = document.getData();
-
-                        aUser[0] = new User(
-                                (String) data.get("name"),
-                                (String) data.get("location"),
-                                (String) data.get("major"),
-                                (String) data.get("phone"),
-                                (String) data.get("pk"),
-                                (String) data.get("school"),
-                                (ArrayList<String>) data.get("friends"),
-                                (ArrayList<String>) data.get("requests"),
-                                (ArrayList<String>) data.get("sentRequests"),
-                                (String) data.get("photoUrl")
-                        );
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-        return aUser[0];
     }
 
     /**
