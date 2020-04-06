@@ -73,8 +73,6 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
-        getUsersAtLocation("469ZXGK3pg5fljAp6v9D");
-
         acct = GoogleSignIn.getLastSignedInAccount(this);
         libraryListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         libraryListView = (ListView) findViewById(R.id.library_list);
@@ -96,10 +94,6 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         realtimeProfileUpdater(acct.getId());
-    }
-
-    public void testMethod() {
-        Log.d(TAG, "big old test");
     }
 
     public void realtimeProfileUpdater(String googID) {
@@ -225,14 +219,6 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 
         libraryListView = (ListView) findViewById(R.id.library_list);
         libraryListView.setAdapter(libraryListAdapter);
-        // Set an item click listener for ListView
-//        libraryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(LandingActivity.this, CheckinActivity.class);
-//                startActivity(intent);
-//            }
-//        });
         libraryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -294,13 +280,6 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                         }
                     }
                 });
-    }
-
-    public void checkIn(String locationID) {
-        db.collection("locations").document(locationID)
-                .update("students", FieldValue.arrayUnion(acct.getId()));
-        db.collection("students").document(acct.getId())
-                .update("location", locationID);
     }
 
 
@@ -416,54 +395,50 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
     /**
      * Send a friend request.
      *
-     * @param senderGoogID
      * @param receiverGoogID
      */
-    public void sendRequest(String senderGoogID, String receiverGoogID) {
-        db.collection("students").document(senderGoogID)
+    public void sendRequest(String receiverGoogID) {
+        db.collection("students").document(user.pk)
                 .update("sentRequests", FieldValue.arrayUnion(receiverGoogID));
         db.collection("students").document(receiverGoogID)
-                .update("requests", FieldValue.arrayUnion(senderGoogID));
+                .update("requests", FieldValue.arrayUnion(user.pk));
 
     }
 
     /**
      * Accept a friend request.
      *
-     * @param accepterGoogID
      * @param accepteGoogID
      */
-    public void acceptRequest(String accepterGoogID, String accepteGoogID) {
+    public void acceptRequest(String accepteGoogID) {
         //remove request
-        db.collection("students").document(accepterGoogID)
+        db.collection("students").document(user.pk)
                 .update("requests", FieldValue.arrayRemove(accepteGoogID));
         //add friend
-        db.collection("students").document(accepterGoogID)
+        db.collection("students").document(user.pk)
                 .update("friends", FieldValue.arrayUnion(accepteGoogID));
         //remove request
         db.collection("students").document(accepteGoogID)
-                .update("sentRequests", FieldValue.arrayRemove(accepterGoogID));
+                .update("sentRequests", FieldValue.arrayRemove(user.pk));
         //add friend
         db.collection("students").document(accepteGoogID)
-                .update("friends", FieldValue.arrayUnion(accepterGoogID));
+                .update("friends", FieldValue.arrayUnion(user.pk));
 
     }
 
     /**
-     * check in
-     *
-     * @param googID
+     * check into location
      * @param locationID
      */
-    public void checkIn(String googID, String locationID) {
+    public void checkIn(String locationID) {
         db.collection("locations").document(locationID)
-                .update("students", FieldValue.arrayUnion(googID));
-        db.collection("students").document(googID)
+                .update("students", FieldValue.arrayUnion(acct.getId()));
+        db.collection("students").document(acct.getId())
                 .update("location", locationID);
     }
 
     /**
-     * check out
+     * check out of location
      *
      */
     public void checkOut() {
@@ -473,20 +448,4 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                 .update("location", "");
     }
 
-
-    /**
-     * This method is a little bit jank and should not be here LOL
-     * It is here because getBaseContext() needs to be passed in from an activity.
-     * For initially setting up all the libraries and schools found in the json files under app/assets
-     */
-//    private void initFirebaseWithPositions() {
-//        DatabaseQueries.PositionDataPoint[] schools = DatabaseQueries.getSchoolsJSON(getBaseContext());
-//        DatabaseQueries.PositionDataPoint[] libraries = DatabaseQueries.getLibrariesJSON(getBaseContext());
-//        for (DatabaseQueries.PositionDataPoint school : schools) {
-//            DatabaseQueries.addToFireStoreCollection("locations", DatabaseQueries.DataPointToMap(school));
-//        }
-//        for (DatabaseQueries.PositionDataPoint library : libraries) {
-//            DatabaseQueries.addToFireStoreCollection("locations", DatabaseQueries.DataPointToMap(library));
-//        }
-//    }
 }
