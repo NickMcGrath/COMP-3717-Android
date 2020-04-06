@@ -399,6 +399,8 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
      * @param locationID
      */
     public void checkIn(String locationID) {
+        if(!user.location.equals(""))
+            checkOut();
         db.collection("locations").document(locationID)
                 .update("students", FieldValue.arrayUnion(acct.getId()));
         db.collection("students").document(acct.getId())
