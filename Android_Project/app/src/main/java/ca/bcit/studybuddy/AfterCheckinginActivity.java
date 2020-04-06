@@ -34,6 +34,7 @@ public class AfterCheckinginActivity extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_after_checkingin, container, false);
+
         library = v.findViewById(R.id.checkin_location);
         address = v.findViewById(R.id.checkin_address);
 

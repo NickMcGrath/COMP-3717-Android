@@ -192,13 +192,13 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         //this is where next intent on location selection
 //        Log.d(TAG, (String) locationsByDist.get(index).get("name"));
 
-        Intent intent = new Intent(LandingActivity.this, CheckinActivity.class);
+        CheckinActivity checkFrag = new CheckinActivity();
         bundle = new Bundle();
         bundle.putString("locationName", locationName);
         bundle.putString("locationAddress", locationAddress);
         bundle.putString("locationPk", locationPk);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        checkFrag.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, checkFrag).commit();
     }
 
     /**
@@ -431,6 +431,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 
     /**
      * check into location
+     *
      * @param locationID
      */
     public void checkIn(String locationID) {
@@ -442,7 +443,6 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 
     /**
      * check out of location
-     *
      */
     public void checkOut() {
         db.collection("locations").document(user.location)
