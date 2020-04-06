@@ -79,4 +79,5 @@ public class AfterCheckinginActivity extends AppCompatActivity {
             return row;
         }
     }
+
 }

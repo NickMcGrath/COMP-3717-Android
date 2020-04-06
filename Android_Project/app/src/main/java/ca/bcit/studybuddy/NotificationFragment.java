@@ -43,7 +43,6 @@ public class NotificationFragment extends Fragment{
         MyAdapter adapter = new MyAdapter(getActivity(), names, schools, images);
         listView.setAdapter(adapter);
 
-        ((LandingActivity)getActivity()).testMethod();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

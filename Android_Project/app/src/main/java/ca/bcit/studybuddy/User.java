@@ -15,8 +15,10 @@ public class User {
     public ArrayList<String> friends;
     public ArrayList<String> requests;
     public ArrayList<String> sendRequests;
+    public String photoUrl;
 
-    public User(String name, String location, String major, String phone, String pk, String school, ArrayList<String> friends, ArrayList<String> requests, ArrayList<String> sendRequests) {
+
+    public User(String name, String location, String major, String phone, String pk, String school, ArrayList<String> friends, ArrayList<String> requests, ArrayList<String> sendRequests, String photoUrl) {
         this.name = name;
         this.location = location;
         this.major = major;
@@ -26,6 +28,7 @@ public class User {
         this.friends = friends;
         this.requests = requests;
         this.sendRequests = sendRequests;
+        this.photoUrl = photoUrl;
     }
 
     @Override
@@ -40,6 +43,7 @@ public class User {
                 ", friends=" + friends +
                 ", requests=" + requests +
                 ", sendRequests=" + sendRequests +
+                ", photoUrl='" + photoUrl + '\'' +
                 '}';
     }
 }
