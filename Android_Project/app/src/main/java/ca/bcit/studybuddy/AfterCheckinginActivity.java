@@ -19,6 +19,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class AfterCheckinginActivity extends Fragment {
@@ -26,9 +28,10 @@ public class AfterCheckinginActivity extends Fragment {
     private TextView library;
     private TextView address;
     private ListView potentialBuddyListView;
-    final int[] images = {R.drawable.logo, R.drawable.logo, R.drawable.logo};
-    final String[] names = {"Rahul Kukreja", "Nathan McNinch", "Chi En Huang"};
-    final String[] schools = {"British Columbia Institute of Technology","British Columbia Institute of Technology","British Columbia Institute of Technology"};
+    private ArrayList<User> users;
+    int[] images; //= {R.drawable.logo, R.drawable.logo, R.drawable.logo};
+    String[] names;// = {"Rahul Kukreja", "Nathan McNinch", "Chi En Huang"};
+    String[] schools;// = {"British Columbia Institute of Technology","British Columbia Institute of Technology","British Columbia Institute of Technology"};
 
     @Nullable
     @Override
@@ -48,19 +51,41 @@ public class AfterCheckinginActivity extends Fragment {
 
         potentialBuddyListView = v.findViewById(R.id.potential_buddy_list);
 
+
+        //fun zone
+        users = ((LandingActivity) getActivity()).getUsersAtLocation(locationStr);
+        //todo images
+        if(users.size() > 0) {
+            names = new String[users.size()];
+            schools = new String[users.size()];
+            images = new int[users.size()];
+            for (int i = 0; i < users.size(); i++) {
+                names[i] = users.get(i).name;
+                schools[i] = users.get(i).school;
+                images[i] = R.drawable.logo;
+            }
+        } else{
+            names = new String[1];
+            schools = new String[1];
+            images = new int[1];
+            names[0] = "No one Yet :(";
+            schools[0] = "";
+            images[0] = R.drawable.logo;
+        }
         MyAdapter adapter = new MyAdapter(getContext(), names, schools, images);
         potentialBuddyListView.setAdapter(adapter);
+
 
         return v;
     }
 
-    class MyAdapter extends ArrayAdapter<String>{
+    class MyAdapter extends ArrayAdapter<String> {
         Context context;
         String rNames[];
         String rSchools[];
         int rImages[];
 
-        MyAdapter(Context c, String name[], String school[],int img[]){
+        MyAdapter(Context c, String name[], String school[], int img[]) {
             super(c, R.layout.activity_buddy_listview, R.id.textView1, name);
             this.context = c;
             this.rNames = name;
@@ -71,7 +96,7 @@ public class AfterCheckinginActivity extends Fragment {
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater layoutInflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View row = layoutInflater.inflate(R.layout.activity_buddy_listview, parent, false);
             ImageView imageView = row.findViewById(R.id.profile_image);
             TextView aName = row.findViewById(R.id.textView1);
@@ -85,5 +110,6 @@ public class AfterCheckinginActivity extends Fragment {
             return row;
         }
     }
+
 
 }
