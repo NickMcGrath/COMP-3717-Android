@@ -56,20 +56,24 @@
             android:id="@+id/btn_accept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/btn_accept"
-            android:layout_weight="1"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@color/btnColor"
+            android:text="@string/btn_accept"
+            android:textColor="@android:color/white"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/btn_decline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/btn_decline"
-            android:layout_weight="1"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@color/btnColor"
+            android:text="@string/btn_decline"
+            android:textColor="@android:color/white"
             tools:ignore="ButtonStyle" />
     </LinearLayout>
 

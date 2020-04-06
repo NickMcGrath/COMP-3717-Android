@@ -77,6 +77,8 @@
         android:id="@+id/profile_update_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/profile_update_btn"/>
+        android:backgroundTint="@color/btnColor"
+        android:text="@string/profile_update_btn"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

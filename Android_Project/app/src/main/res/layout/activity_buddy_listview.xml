@@ -44,6 +44,8 @@
         android:layout_height="40dp"
         android:layout_alignTop="@+id/profile_image"
         android:layout_alignParentRight="true"
-        android:text="Request" />
+        android:backgroundTint="@color/btnColor"
+        android:text="Request"
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>
