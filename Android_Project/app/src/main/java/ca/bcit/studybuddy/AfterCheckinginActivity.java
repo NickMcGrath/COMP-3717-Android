@@ -100,11 +100,12 @@ public class AfterCheckinginActivity extends Fragment {
             imageView.setImageResource(rImages[position]);
             aName.setText(rNames[position]);
             aSchool.setText(rSchools[position]);
-            Button b = row.findViewById(R.id.btn_request);
+            final Button b = row.findViewById(R.id.btn_request);
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onPressRequest(position);
+                    b.setAlpha((float) 0.5);
                 }
             });
 
@@ -113,13 +114,18 @@ public class AfterCheckinginActivity extends Fragment {
         }
     }
 
+    /**
+     * Takes the position of the button and sends a request to the corresponding user.
+     *
+     * @param pos
+     */
     public void onPressRequest(int pos) {
         Log.d(TAG, "made it here " + pos);
+        ((LandingActivity) getActivity()).sendRequest(users.get(pos).pk);
     }
 
     /**
      * Gets all the users at a location and sets them in Adapter.
-     * <p>
      * This is the nastiest code I have ever written, I apologize for anyone that has to see this.
      * It all started when I realized that making 2 calls to a firebase sequentially would be harder
      * than I though 🤔 then when I realized these calls where async methods that cant return like
