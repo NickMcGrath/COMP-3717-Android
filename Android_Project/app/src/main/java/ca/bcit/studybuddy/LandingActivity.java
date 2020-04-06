@@ -126,7 +126,8 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                                         (String) data.get("school"),
                                         (ArrayList<String>) data.get("friends"),
                                         (ArrayList<String>) data.get("requests"),
-                                        (ArrayList<String>) data.get("sentRequests")
+                                        (ArrayList<String>) data.get("sentRequests"),
+                                        (String) data.get("photoUrl")
                                 );
 
 
@@ -398,7 +399,8 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                                 (String) data.get("school"),
                                 (ArrayList<String>) data.get("friends"),
                                 (ArrayList<String>) data.get("requests"),
-                                (ArrayList<String>) data.get("sentRequests")
+                                (ArrayList<String>) data.get("sentRequests"),
+                                (String) data.get("photoUrl")
                         );
                     } else {
                         Log.d(TAG, "No such document");

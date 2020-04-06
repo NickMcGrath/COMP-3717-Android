@@ -151,6 +151,7 @@ public class YourProfileFragment extends Fragment implements AdapterView.OnItemS
             data.put("sentRequests", new ArrayList<String>());
             data.put("friends", new ArrayList<String>());
             data.put("pk", acct.getId());
+            data.put("photoUrl", "TODO PHOTO URL HERE");
             String googID = acct.getId();
 
             db.collection("students").document(googID)
