@@ -99,31 +99,35 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         Log.d(TAG, "big old test");
     }
     public void realtimeProfileUpdater(String googID) {
-        db.collection("students").document(googID)
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
-                            return;
-                        }
-                        if (snapshot != null && snapshot.exists()) {
-                            Log.d(TAG, "Current data: " + snapshot.getData());
-                            Map<String, Object> data = snapshot.getData();
-                            if(((ArrayList<String>) data.get("requests")).size() >= requestsByID.size()) {
-                                requestsByID = (ArrayList<String>) data.get("requests");
-                                Toast.makeText(getBaseContext(), "New Request!" , Toast.LENGTH_SHORT).show();
-                            } else {
-                                requestsByID = (ArrayList<String>) data.get("requests");
+        try {
+            db.collection("students").document(googID)
+                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                            @Nullable FirebaseFirestoreException e) {
+                            if (e != null) {
+                                Log.w(TAG, "Listen failed.", e);
+                                return;
                             }
+                            if (snapshot != null && snapshot.exists()) {
+                                Log.d(TAG, "Current data: " + snapshot.getData());
+                                Map<String, Object> data = snapshot.getData();
+                                if (((ArrayList<String>) data.get("requests")).size() >= requestsByID.size()) {
+                                    requestsByID = (ArrayList<String>) data.get("requests");
+                                    Toast.makeText(getBaseContext(), "New Request!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    requestsByID = (ArrayList<String>) data.get("requests");
+                                }
 
 
-                        } else {
-                            Log.d(TAG, "Current data: null");
+                            } else {
+                                Log.d(TAG, "Current data: null");
+                            }
                         }
-                    }
-                });
+                    });
+        } catch (Exception e){
+            Log.d(TAG, e.getMessage());
+        }
     }
 
     /**
@@ -206,7 +210,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
      *
      *
      */
-    public void onBottomLocationSelection(String locationName, String locationAddress) {
+    public void onBottomLocationSelection(String locationName, String locationAddress, String locationPk) {
         //this is where next intent on location selection
 //        Log.d(TAG, (String) locationsByDist.get(index).get("name"));
 
@@ -214,6 +218,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         Bundle bundle = new Bundle();
         bundle.putString("locationName", locationName);
         bundle.putString("locationAddress", locationAddress);
+        bundle.putString("locationPk", locationPk);
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -234,6 +239,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
             Log.d(TAG, locationsByDist.get(i).get("distance") + " " + locationsByDist.get(i).get("name"));
             libraryListAdapter.add((String) locationsByDist.get(i).get("name") + "\n" + locationsByDist.get(i).get("address"));
         }
+
         libraryListView = (ListView) findViewById(R.id.library_list);
         libraryListView.setAdapter(libraryListAdapter);
         // Set an item click listener for ListView
@@ -250,8 +256,8 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 
                 String locationName = locationsByDist.get(position).get("name").toString();
                 String locationAddress = locationsByDist.get(position).get("address").toString();
-
-                onBottomLocationSelection(locationName, locationAddress);
+                String locationPk = locationsByDist.get(position).get("pk").toString();
+                onBottomLocationSelection(locationName, locationAddress, locationPk);
             }
         });
 
@@ -275,6 +281,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
      * Sets Map marker locations then calls setBottomBarLocaitons().
      */
     public void setLocations() {
+
         db.collection("locations").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
