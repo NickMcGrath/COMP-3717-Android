@@ -64,6 +64,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
     private static GoogleSignInAccount acct;
     public User user;
     private int previousRequestSize = 0;
+    Bundle bundle;
 
     public LandingActivity() {
     }
@@ -197,7 +198,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 //        Log.d(TAG, (String) locationsByDist.get(index).get("name"));
 
         Intent intent = new Intent(LandingActivity.this, CheckinActivity.class);
-        Bundle bundle = new Bundle();
+        bundle = new Bundle();
         bundle.putString("locationName", locationName);
         bundle.putString("locationAddress", locationAddress);
         bundle.putString("locationPk", locationPk);
@@ -320,7 +321,9 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new StudyToolsFragment()).commit();
                 break;
             case R.id.nav_checkout:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CheckoutFragment()).commit();
+                CheckoutFragment checkOutFragment = new CheckoutFragment();
+                checkOutFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, checkOutFragment).commit();
                 break;
         }
 
