@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class AfterCheckinginActivity extends AppCompatActivity {
@@ -36,8 +38,9 @@ public class AfterCheckinginActivity extends AppCompatActivity {
         address = findViewById(R.id.checkin_address);
 
         // hard coded for now; these should be passed from the landing activity
-        library.setText("Central Branch");
-        address.setText("350 W Georgia St, Vancouver, BC V6B 6B1");
+        Bundle bundle = getIntent().getExtras();
+        library.setText(bundle.getString("locationName"));
+        address.setText(bundle.getString("locationAddress"));
 
         potentialBuddyListView = findViewById(R.id.potential_buddy_list);
 

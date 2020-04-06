@@ -26,6 +26,7 @@ public class CheckinActivity extends AppCompatActivity {
     GoogleSignInAccount acct;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String locationPk;
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class CheckinActivity extends AppCompatActivity {
         btnCheckIn = findViewById(R.id.check_in);
         btnCheckIn.setOnClickListener(btnListener);
 
-        Bundle bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();
 
         String locationName = bundle.getString("locationName");
         String locationAddress = bundle.getString("locationAddress");
@@ -60,11 +61,11 @@ public class CheckinActivity extends AppCompatActivity {
 
     private View.OnClickListener btnListener = new View.OnClickListener() {
         public void onClick(View v) {
-            System.out.println("SOMETHING " + locationPk);
             Map<String, Object> data = new HashMap<>();
             data.put("location", locationPk);
             db.collection("students").document(acct.getId()).set(data, SetOptions.merge());
             Intent myIntent = new Intent(v.getContext(), AfterCheckinginActivity.class);
+            myIntent.putExtras(bundle);
             startActivity(myIntent);
         }
     };
