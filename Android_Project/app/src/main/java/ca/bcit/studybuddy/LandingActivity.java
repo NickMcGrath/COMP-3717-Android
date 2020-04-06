@@ -353,40 +353,40 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
     /**
      * Accept a friend request.
      *
-     * @param accepteGoogID
+     * @param googID
      */
-    public void acceptRequest(String accepteGoogID) {
+    public void acceptRequest(String googID) {
         //remove request
         db.collection("students").document(user.pk)
-                .update("requests", FieldValue.arrayRemove(accepteGoogID));
+                .update("requests", FieldValue.arrayRemove(googID));
         //remove sent request just incase
         db.collection("students").document(user.pk)
-                .update("sentRequests", FieldValue.arrayRemove(accepteGoogID));
+                .update("sentRequests", FieldValue.arrayRemove(googID));
         //add friend
         db.collection("students").document(user.pk)
-                .update("friends", FieldValue.arrayUnion(accepteGoogID));
+                .update("friends", FieldValue.arrayUnion(googID));
         //remove request
-        db.collection("students").document(accepteGoogID)
+        db.collection("students").document(googID)
                 .update("sentRequests", FieldValue.arrayRemove(user.pk));
         //add friend
-        db.collection("students").document(accepteGoogID)
+        db.collection("students").document(googID)
                 .update("friends", FieldValue.arrayUnion(user.pk));
 
     }
     /**
      * Decline a friend request.
      *
-     * @param accepteGoogID
+     * @param googID
      */
-    public void declineRequest(String accepteGoogID) {
+    public void declineRequest(String googID) {
         //remove request
         db.collection("students").document(user.pk)
-                .update("requests", FieldValue.arrayRemove(accepteGoogID));
+                .update("requests", FieldValue.arrayRemove(googID));
         //add friend
 //        db.collection("students").document(user.pk)
 //                .update("friends", FieldValue.arrayUnion(accepteGoogID));
         //remove request
-        db.collection("students").document(accepteGoogID)
+        db.collection("students").document(googID)
                 .update("sentRequests", FieldValue.arrayRemove(user.pk));
         //add friend
 //        db.collection("students").document(accepteGoogID)
