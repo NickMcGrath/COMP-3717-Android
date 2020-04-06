@@ -14,9 +14,9 @@ public class User {
     public String school;
     public ArrayList<String> friends;
     public ArrayList<String> requests;
-    public ArrayList<String> sendRuests;
+    public ArrayList<String> sendRequests;
 
-    public User(String name, String location, String major, String phone, String pk, String school, ArrayList<String> friends, ArrayList<String> requests, ArrayList<String> sendRuests) {
+    public User(String name, String location, String major, String phone, String pk, String school, ArrayList<String> friends, ArrayList<String> requests, ArrayList<String> sendRequests) {
         this.name = name;
         this.location = location;
         this.major = major;
@@ -25,6 +25,6 @@ public class User {
         this.school = school;
         this.friends = friends;
         this.requests = requests;
-        this.sendRuests = sendRuests;
+        this.sendRequests = sendRequests;
     }
 }
