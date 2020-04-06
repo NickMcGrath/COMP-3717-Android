@@ -145,37 +145,6 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         }
     }
 
-    /**
-     * takes the Google IDs of requests and sets Notification array
-     *
-     * @param googID
-     */
-//    public void setNotification(String googID) {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection("students").document(googID)
-//                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        Map<String, Object> data = document.getData();
-//                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-//                        Log.d(TAG, (String) data.get("name"));
-//                            Log.d(TAG, "yes i am not null");
-//                            requestsByID.add(document.getData());
-//                    } else {
-//                        Log.d(TAG, "No such document");
-//                    }
-//                } else {
-//                    Log.d(TAG, "get failed with ", task.getException());
-//                }
-//            }
-//        });    }
-//    public void onRequestSelection(int index){
-//        //this is where next intent on request selection
-//        Log.d(TAG, (String) requestsByID.get(index).get("name"));
-//    }
 
     /**
      * When map is ready zooms in on current location.
