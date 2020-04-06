@@ -73,6 +73,8 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
+        getUsersAtLocation("469ZXGK3pg5fljAp6v9D");
+
         acct = GoogleSignIn.getLastSignedInAccount(this);
         libraryListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         libraryListView = (ListView) findViewById(R.id.library_list);
@@ -366,6 +368,139 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
             super.onBackPressed();
         }
     }
+
+    /**
+     * Returns an ArrayList of all the users at a location
+     *
+     * @param locationID
+     * @return
+     */
+    public ArrayList<User> getUsersAtLocation(String locationID) {
+        final ArrayList<String> usersIDs = new ArrayList<String>();
+        db.collection("locations").document(locationID)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "Current data: " + document.getData());
+                        Map<String, Object> data = document.getData();
+                        usersIDs.addAll((ArrayList<String>) data.get("students"));
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+        ArrayList<User> users = new ArrayList<User>();
+        for (String userID : usersIDs) {
+            users.add(viewUser(userID));
+        }
+        Log.d(TAG, users.toString());
+        return users;
+    }
+
+    /**
+     * Returns a user from a user id.
+     *
+     * @param googID
+     * @return
+     */
+    public User viewUser(String googID) {
+        final User[] aUser = {null};
+        db.collection("students").document(googID)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "Current data: " + document.getData());
+                        Map<String, Object> data = document.getData();
+
+                        aUser[0] = new User(
+                                (String) data.get("name"),
+                                (String) data.get("location"),
+                                (String) data.get("major"),
+                                (String) data.get("phone"),
+                                (String) data.get("pk"),
+                                (String) data.get("school"),
+                                (ArrayList<String>) data.get("friends"),
+                                (ArrayList<String>) data.get("requests"),
+                                (ArrayList<String>) data.get("sentRequests")
+                        );
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+        return aUser[0];
+    }
+
+    /**
+     * Send a friend request.
+     * @param senderGoogID
+     * @param receiverGoogID
+     */
+    public  void sendRequest(String senderGoogID, String receiverGoogID) {
+        db.collection("students").document(senderGoogID)
+                .update("sentRequests", FieldValue.arrayUnion(receiverGoogID));
+        db.collection("students").document(receiverGoogID)
+                .update("requests", FieldValue.arrayUnion(senderGoogID));
+
+    }
+
+    /**
+     * Accept a friend request.
+     * @param accepterGoogID
+     * @param accepteGoogID
+     */
+    public void acceptRequest(String accepterGoogID, String accepteGoogID) {
+        //remove request
+        db.collection("students").document(accepterGoogID)
+                .update("requests", FieldValue.arrayRemove(accepteGoogID));
+        //add friend
+        db.collection("students").document(accepterGoogID)
+                .update("friends", FieldValue.arrayUnion(accepteGoogID));
+        //remove request
+        db.collection("students").document(accepteGoogID)
+                .update("sentRequests", FieldValue.arrayRemove(accepterGoogID));
+        //add friend
+        db.collection("students").document(accepteGoogID)
+                .update("friends", FieldValue.arrayUnion(accepterGoogID));
+
+    }
+
+    /**
+     * check in
+     * @param googID
+     * @param locationID
+     */
+    public void checkIn(String googID, String locationID) {
+        db.collection("locations").document(locationID)
+                .update("students", FieldValue.arrayUnion(googID));
+        db.collection("students").document(googID)
+                .update("location", locationID);
+    }
+
+    /**
+     * check out
+     * @param googID
+     * @param locationID
+     */
+    public void checkOut(String googID, String locationID) {
+        db.collection("locations").document(locationID)
+                .update("students", FieldValue.arrayRemove(googID));
+        db.collection("students").document(googID)
+                .update("location", "");
+    }
+
 
     /**
      * This method is a little bit jank and should not be here LOL
