@@ -295,8 +295,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                 });
     }
 
-    public static void checkIn(String locationID) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public void checkIn(String locationID) {
         db.collection("locations").document(locationID)
                 .update("students", FieldValue.arrayUnion(acct.getId()));
         db.collection("students").document(acct.getId())
@@ -414,10 +413,11 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 
     /**
      * Send a friend request.
+     *
      * @param senderGoogID
      * @param receiverGoogID
      */
-    public  void sendRequest(String senderGoogID, String receiverGoogID) {
+    public void sendRequest(String senderGoogID, String receiverGoogID) {
         db.collection("students").document(senderGoogID)
                 .update("sentRequests", FieldValue.arrayUnion(receiverGoogID));
         db.collection("students").document(receiverGoogID)
@@ -427,6 +427,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 
     /**
      * Accept a friend request.
+     *
      * @param accepterGoogID
      * @param accepteGoogID
      */
@@ -448,6 +449,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 
     /**
      * check in
+     *
      * @param googID
      * @param locationID
      */
@@ -460,13 +462,12 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 
     /**
      * check out
-     * @param googID
-     * @param locationID
+     *
      */
-    public void checkOut(String googID, String locationID) {
-        db.collection("locations").document(locationID)
-                .update("students", FieldValue.arrayRemove(googID));
-        db.collection("students").document(googID)
+    public void checkOut() {
+        db.collection("locations").document(user.location)
+                .update("students", FieldValue.arrayRemove(user.pk));
+        db.collection("students").document(user.pk)
                 .update("location", "");
     }
 
