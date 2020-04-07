@@ -69,7 +69,7 @@ public class NotificationFragment extends Fragment {
 
         @NonNull
         @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        public View getView(final int position, @Nullable View convertView, @NonNull final ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View row = layoutInflater.inflate(R.layout.fragment_notification_listview, parent, false);
 //            View view = inflater.inflate(R.layout.fragment_notification, container, false);
@@ -86,24 +86,24 @@ public class NotificationFragment extends Fragment {
             final Button btnDecline = (Button) row.findViewById(R.id.btn_decline);
             final int pos = position;
             if (((LandingActivity) getActivity()).user.friends.contains(users.get(position).pk)) {
-                btnAccept.setAlpha(0);
-                btnDecline.setAlpha(0);
+                btnAccept.setVisibility(View.GONE);
+                btnDecline.setVisibility(View.GONE);
                 aSchool.setText(rSchools[position] + "\n" + users.get(position).phone);
             } else {
                 btnAccept.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         acceptRequest(pos);
-                        btnAccept.setAlpha(0);
-                        btnDecline.setAlpha(0);
+                        btnAccept.setVisibility(View.GONE);
+                        btnDecline.setVisibility(View.GONE);
                     }
                 });
                 btnDecline.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         declineRequest(pos);
-                        btnAccept.setAlpha(0);
-                        btnDecline.setAlpha(0);
+                        btnAccept.setVisibility(View.GONE);
+                        btnDecline.setVisibility(View.GONE);
                     }
                 });
             }
