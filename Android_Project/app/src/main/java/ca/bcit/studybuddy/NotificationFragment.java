@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -85,6 +86,13 @@ public class NotificationFragment extends Fragment {
             final Button btnAccept = (Button) row.findViewById(R.id.btn_accept);
             final Button btnDecline = (Button) row.findViewById(R.id.btn_decline);
             final int pos = position;
+            btnViewProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDialog(pos);
+                }
+            });
+
             if (((LandingActivity) getActivity()).user.friends.contains(users.get(position).pk)) {
                 btnAccept.setAlpha(0);
                 btnDecline.setAlpha(0);
@@ -109,12 +117,12 @@ public class NotificationFragment extends Fragment {
             }
 
 
-            btnViewProfile.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showDialog();
-                }
-            });
+            //btnViewProfile.setOnClickListener(new View.OnClickListener() {
+            //    @Override
+            //    public void onClick(View v) {
+            //        showDialog();
+            //    }
+            //});
             return row;
         }
 
@@ -136,7 +144,7 @@ public class NotificationFragment extends Fragment {
             ((LandingActivity) getActivity()).declineRequest(users.get(pos).pk);
         }
 
-        public void showDialog() {
+        public void showDialog(int position) {
             final Dialog dialog = new Dialog(getActivity());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -148,10 +156,13 @@ public class NotificationFragment extends Fragment {
             TextView major = dialog.findViewById(R.id.profile_major);
 
             // TODO need to replace these hardcoded data with user info from database or google account
+
             //image.setImageResource(rImages[0]);
-            name.setText(rNames[0]);
-            major.setText("Study " + "CST");
-            school.setText("at " + rSchools[0]);
+            String url = users.get(position).photoUrl;
+            Glide.with(getContext()).load(url).into(image);
+            name.setText(users.get(position).name);
+            major.setText("Study " + users.get(position).major);
+            school.setText("at " + users.get(position).school);
 
             Button btnClose = dialog.findViewById(R.id.btn_close);
             btnClose.setOnClickListener(new View.OnClickListener() {
