@@ -78,7 +78,11 @@ public class NotificationFragment extends Fragment {
             TextView aName = row.findViewById(R.id.textView1);
             TextView aSchool = row.findViewById(R.id.textView2);
 
-            imageView.setImageResource(rImages[position]);
+            String url = users.get(position).photoUrl;
+            if(url == "")
+                imageView.setImageResource(R.drawable.logo);
+            else
+                Glide.with(getContext()).load(url).into(imageView);
             aName.setText(rNames[position]);
             aSchool.setText(rSchools[position]);
             //Handle buttons and add onClickListeners
@@ -86,6 +90,7 @@ public class NotificationFragment extends Fragment {
             final Button btnAccept = (Button) row.findViewById(R.id.btn_accept);
             final Button btnDecline = (Button) row.findViewById(R.id.btn_decline);
             final int pos = position;
+
             btnViewProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -155,11 +160,12 @@ public class NotificationFragment extends Fragment {
             TextView school = dialog.findViewById(R.id.profile_school);
             TextView major = dialog.findViewById(R.id.profile_major);
 
-            // TODO need to replace these hardcoded data with user info from database or google account
-
             //image.setImageResource(rImages[0]);
             String url = users.get(position).photoUrl;
-            Glide.with(getContext()).load(url).into(image);
+            if(url == "")
+                image.setImageResource(R.drawable.logo);
+            else
+                Glide.with(getContext()).load(url).into(image);
             name.setText(users.get(position).name);
             major.setText("Study " + users.get(position).major);
             school.setText("at " + users.get(position).school);

@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,7 +37,7 @@ public class AfterCheckinginActivity extends Fragment {
     private Bundle bundle;
     private String locationPk;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    int[] images;
+    String[] images;
     String[] names;
     String[] schools;
     String TAG = "AfterCheckinginActivity";
@@ -76,10 +77,10 @@ public class AfterCheckinginActivity extends Fragment {
         Context context;
         String rNames[];
         String rSchools[];
-        int rImages[];
+        String rImages[];
 
 
-        MyAdapter(Context c, String name[], String school[], int img[]) {
+        MyAdapter(Context c, String name[], String school[], String img[]) {
             super(c, R.layout.activity_buddy_listview, R.id.textView1, name);
             this.context = c;
             this.rNames = name;
@@ -97,9 +98,13 @@ public class AfterCheckinginActivity extends Fragment {
             TextView aSchool = row.findViewById(R.id.textView2);
 
             // now set out resources on viewss
-            imageView.setImageResource(rImages[position]);
+            if(rImages[position] == "")
+                imageView.setImageResource(R.drawable.logo);
+            else
+                Glide.with(getContext()).load(rImages[position]).into(imageView);
             aName.setText(rNames[position]);
             aSchool.setText(rSchools[position]);
+
             final Button b = row.findViewById(R.id.btn_request);
             if (((LandingActivity) getActivity()).user.friends.contains(users.get(position).pk)) {
                 b.setAlpha(0);
@@ -192,22 +197,22 @@ public class AfterCheckinginActivity extends Fragment {
                                     if (users.size() > 0) {
                                         names = new String[users.size() - 1];
                                         schools = new String[users.size() - 1];
-                                        images = new int[users.size() - 1];
+                                        images = new String[users.size() - 1];
                                         for (int j=0, i = 0; j < users.size();j++) {
                                             if(!((LandingActivity) getActivity()).user.pk.equals(users.get(j).pk)){
                                                 names[i] = users.get(j).name;
                                                 schools[i] = users.get(j).school;
-                                                images[i] = R.drawable.logo;
+                                                images[i] = users.get(j).photoUrl;
                                                 i++;
                                             }
                                         }
                                     } else {
                                         names = new String[1];
                                         schools = new String[1];
-                                        images = new int[1];
+                                        images = new String[1];
                                         names[0] = "No one Yet :(";
                                         schools[0] = "";
-                                        images[0] = R.drawable.logo;
+                                        images[0] = "";
                                     }
                                     Log.d("mylog", Arrays.toString(names));
                                     MyAdapter adapter = new MyAdapter(getContext(), names, schools, images);
