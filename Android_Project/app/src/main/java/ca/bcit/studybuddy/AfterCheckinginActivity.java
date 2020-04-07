@@ -101,7 +101,8 @@ public class AfterCheckinginActivity extends Fragment {
             aName.setText(rNames[position]);
             aSchool.setText(rSchools[position]);
             final Button b = row.findViewById(R.id.btn_request);
-            if (((LandingActivity) getActivity()).user.friends.contains(users.get(position).pk)) {
+            if (((LandingActivity) getActivity()).user.friends.contains(users.get(position).pk) ||
+                    ((LandingActivity) getActivity()).user.pk.equals(users.get(position).pk)) {
                 b.setAlpha(0);
             } else {
                 b.setOnClickListener(new View.OnClickListener() {
@@ -189,17 +190,16 @@ public class AfterCheckinginActivity extends Fragment {
                                     );
                                     users.add(aUser);
                                     Log.d("mylog in view", aUser.toString());
-                                    if (users.size() > 0) {
-                                        names = new String[users.size() - 1];
-                                        schools = new String[users.size() - 1];
-                                        images = new int[users.size() - 1];
-                                        for (int j=0, i = 0; j < users.size();j++) {
-                                            if(!((LandingActivity) getActivity()).user.pk.equals(users.get(j).pk)){
-                                                names[i] = users.get(j).name;
-                                                schools[i] = users.get(j).school;
-                                                images[i] = R.drawable.logo;
-                                                i++;
-                                            }
+                                    if (users.size() > 1) {
+                                        names = new String[users.size()];
+                                        schools = new String[users.size()];
+                                        images = new int[users.size()];
+                                        for (int i = 0; i < users.size(); i++) {
+//                                            if(!((LandingActivity) getActivity()).user.pk.equals(users.get(j).pk)){
+                                            names[i] = users.get(i).name;
+                                            schools[i] = users.get(i).school;
+                                            images[i] = R.drawable.logo;
+
                                         }
                                     } else {
                                         names = new String[1];
