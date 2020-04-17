@@ -38,7 +38,6 @@ public class CheckoutFragment extends Fragment {
         btnCheckOut.setOnClickListener(btnListener);
         location = v.findViewById(R.id.current_location);
         address = v.findViewById(R.id.address);
-        displayLocationInfo();
         locationPK = ((LandingActivity) getActivity()).user.location;
         db.collection("locations").document(locationPK)
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
