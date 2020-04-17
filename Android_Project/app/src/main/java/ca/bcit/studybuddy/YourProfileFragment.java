@@ -144,6 +144,7 @@ public class YourProfileFragment extends Fragment implements AdapterView.OnItemS
 
             Map<String, Object> data = new HashMap<>();
             data.put("name", acct.getGivenName());
+            data.put("location", acct.getGivenName());
             data.put("major", major.getText().toString());
             data.put("school", school.getSelectedItem().toString());
             data.put("phone", phone.getText().toString());
