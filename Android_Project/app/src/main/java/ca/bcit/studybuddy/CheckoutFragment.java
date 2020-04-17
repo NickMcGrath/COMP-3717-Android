@@ -62,12 +62,6 @@ public class CheckoutFragment extends Fragment {
 
     }
 
-    private void displayLocationInfo () {
-
-
-
-    }
-
     private View.OnClickListener btnListener = new View.OnClickListener(){
         public void onClick(View v){
             if (((LandingActivity) getActivity()).user.location != ""){
