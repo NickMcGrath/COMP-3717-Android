@@ -3,6 +3,7 @@ package ca.bcit.studybuddy;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -91,6 +92,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
 
         // Hamburger menu bar
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(Color.parseColor("#DE7070"));
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
@@ -318,9 +320,10 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new StudyToolsFragment()).commit();
                 break;
             case R.id.nav_checkout:
-                CheckoutFragment checkOutFragment = new CheckoutFragment();
-                checkOutFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, checkOutFragment).commit();
+//                CheckoutFragment checkOutFragment = new CheckoutFragment();
+//                checkOutFragment.setArguments(bundle);
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, checkOutFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CheckoutFragment()).commit();
                 break;
         }
 
@@ -405,6 +408,7 @@ public class LandingActivity extends AppCompatActivity implements NavigationView
                 .update("students", FieldValue.arrayUnion(acct.getId()));
         db.collection("students").document(acct.getId())
                 .update("location", locationID);
+        user.location = locationID;
     }
 
     /**

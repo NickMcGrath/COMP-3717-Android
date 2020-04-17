@@ -46,6 +46,7 @@ public class YourProfileFragment extends Fragment implements AdapterView.OnItemS
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount acct;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
